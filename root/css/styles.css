@@ -1,0 +1,14 @@
+
+#upcoming-tasks {
+    font-family: Bebas Neue;
+    text-align: center;
+}
+
+#add_assignment {
+    margin: 0%;
+}
+
+#header {
+    display: grid;
+    align-self: center;
+}

@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-    <title>Homework Manager</title>
+    <title>Add Assignment</title>
 </head>
 <body>
     <div class="container-fluid">
@@ -25,34 +25,26 @@
                 <h6>
                     V1.0.0
                 </h6>
+                <h3 id="subheading">
+                 Add Assignment
+                </h3>
             </div>
         </div>
         <div class="row">
-            <div id="upcoming-tasks">
-                <h4>Upcoming Assignments</h4>
-                <table id="upcoming" class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>
-                                <a id="add_assignment" href="add_assignment.html" class="btn btn-primary">Add Assignment</a>
-                            </th>
-                            <th>Class</th>
-                            <th>Name</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <td id="buttons"></td>
-                        <td id="class"></td>
-                        <td id="name"></td>
-                        <td id="date"></td>
-                        <td id="status"></td>
-                    </tbody>
-                </table>
+          <div id="menus" class="d-flex justify-content-center">
+            <div id="select-class">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Class
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="add_class.html">Add Class</a>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

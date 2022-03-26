@@ -3,3 +3,15 @@
     margin-top: 5%;
     margin-bottom: 5%;
 }
+
+#create_assessment {
+    display: None;
+}
+
+#save-discard {
+    margin: 2%;
+}
+
+#syllabus {
+    display: None;
+}

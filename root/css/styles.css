@@ -4,11 +4,12 @@
     text-align: center;
 }
 
-#add_assignment {
-    margin: 0%;
-}
-
 #header {
     display: grid;
     align-self: center;
 }
+
+.btn {
+    margin: 1%;
+}
+

@@ -8,22 +8,22 @@ function makeInvisible(element) {
     element.style.display = "None";
 }
 
-function saveAssessment() {
-    makeInvisible(createAssessment);
-}
+// function saveAssessment() {
+//     makeInvisible(createAssessment);
+// }
 
-function createAssessment() {
-    //TODO
-}
+// function createAssessment() {
+//     //TODO
+// }
 
-function updateSyllabus() {
-    //TODO
-}
+// function updateSyllabus() {
+//     //TODO
+// }
 
-function calculateValidSyllabus() {
-    //TODO
-}
+// function calculateValidSyllabus() {
+//     //TODO
+// }
 
-function saveSyllabus() {
-    //TODO
-}
+// function saveSyllabus() {
+//     //TODO
+// }

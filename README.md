@@ -1,3 +1,3 @@
 #AdvancedHomeworkManager
 
-Currently remaking a program that I had made previously into a chrome extension. Program was simple enough, it should be possible to basically just be front-end.
+Chrome Extension Homework manager. I am currently remaking it so that it is pure JS (no backend, it was unnecessarily complicated. 

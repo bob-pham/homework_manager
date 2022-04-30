@@ -8,21 +8,10 @@
   font-family: Montserrat;
 }
 
-#class_selected {
-  display: None;
-  margin: 1%;
+.assessment-container {
+  display: none;
+  place-items: center;
 }
-
-#add_assessment {
- display: None; 
- margin: 1%;
-}
-
-#date_selection {
-  display: None;
-  padding: 1%;
-}
-
 
 #button_selection {
   margin:1%;
@@ -78,6 +67,8 @@
   display: block;
   border: none;
   background-color: #f9f9f9;
+  width: 100%;
+  cursor: pointer;
 
 }
 
@@ -116,8 +107,103 @@
   font-size: 1.5rem;
   margin: 0.5vh;
   cursor: pointer;
+  text-align: center;
+}
+
+.date-selection {
+  display: none;
+  place-items: center;
+}
+
+.reminder-date {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.date-selection h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  margin: 1vh;
+  place-self: center;
+}
+
+
+.date-selection h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  margin: 1vh;
+  place-self: center;
+}
+
+.month {
+  width: 10vw;
+  grid-column: 3 / span 1;
+}
+
+.day {
+  grid-column: 5 / span 1;
+  width: 10vw;
+}
+
+.year {
+  grid-column: 7 / span 1;
+  width: 10vw;
+}
+
+.time {
+  grid-column: 9 / span 1;
+  width: 10vw;
+}
+
+.ampm {
+  width:5vw;
+  font-size: 1rem;
+}
+
+.ampmbutton {
+  width: 10vw !important;
+  text-align: justify;
 }
 
 #create_ass_form {
   display: none;
+}
+
+#save-discard {
+  color: white;
+  background-color: var(--dark-button);
+  width: 30vw;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  margin: 0.5vh;
+  cursor: pointer;
+  text-align: center;
+}
+
+.save-or-discard {
+  display: grid;
+  place-items: center;
+}
+
+.save {
+  display: none;
+  color: white;
+  background-color: var(--important-button-blue);
+  width: 30vw;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  margin: 0.5vh;
+  cursor: pointer;
+  text-align: center;
+}
+
+.discard {
+  color: white;
+  background-color: var(--dark-button);
+  width: 30vw;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  margin: 0.5vh;
+  cursor: pointer;
+  text-align: center;
 }

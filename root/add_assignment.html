@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0", shrink-to-fit="no">    
     <link rel="stylesheet" href="css/assignment.css">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/dropdown.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -35,12 +36,14 @@
         <a href="add_class.html">Add Class</a>
       </div>
     </div>
-    <div class="dropdown-menu">
-      <button class="dropdown-menu-button" type="button" id="dropdownMenuButton">
-        Assessment
-      </button>
-      <div class="dropdown-content">
-        <button >Add Assessment / Edit Syllabus</button>
+    <div class="assessment-container">
+      <div class="dropdown-menu">
+        <button class="dropdown-menu-button" type="button" id="dropdownMenuButton">
+          Assessment
+        </button>
+        <div class="dropdown-content">
+          <button >Add Assessment / Edit Syllabus</button>
+        </div>
       </div>
     </div>
     <div id="create_ass_form">
@@ -53,158 +56,81 @@
           <label for="name">Assessment Weight:</label>
           <input type="text" class="form-control" id="ass-name">
         </div>
-        <button id="save-discard" class="btn btn-secondary btn-sm col-2" role="button" onclick="saveAssessment()">Save</button>
-        <button id="save-discard" class="btn btn-secondary btn-sm col-2" role="button" onclick="makeInvisible(add_assessment)">Discard</button>
+        <button id="save-discard" role="button" onclick="saveAssessment()">Save</button>
+        <button id="save-discard" role="button" onclick="makeInvisible(add_assessment)">Discard</button>
       </div>
     </div>
-  </div>
-
-
-        <!-- <div id="date_selection" class="container-fluid">
-          <div class="row text-center">
-            <h6>Reminder Date</h6>
-          </div>
-          <div class="row">
-            <div class="d-flex justify-content-center">
-              <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Month
-                </a>
-              
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <button class="dropdown-item" href="#">January</button>
-                  <button class="dropdown-item" href="#">February</button>
-                  <button class="dropdown-item" href="#">March</button>
-                  <button class="dropdown-item" href="#">April</button>
-                  <button class="dropdown-item" href="#">May</button>
-                  <button class="dropdown-item" href="#">June</button>
-                  <button class="dropdown-item" href="#">July</button>
-                  <button class="dropdown-item" href="#">August</button>
-                  <button class="dropdown-item" href="#">September</button>
-                  <button class="dropdown-item" href="#">October</button>
-                  <button class="dropdown-item" href="#">November</button>
-                  <button class="dropdown-item" href="#">December</button>
-                </div>
-              </div>
-              <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Day
-                </a>
-              
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <button class="dropdown-item" href="#">1</button>
-                  <button class="dropdown-item" href="#">2</button>
-                  <button class="dropdown-item" href="#">3</button>
-                  <button class="dropdown-item" href="#">4</button>
-                  <button class="dropdown-item" href="#">5</button>
-                  <button class="dropdown-item" href="#">6</button>
-                  <button class="dropdown-item" href="#">7</button>
-                  <button class="dropdown-item" href="#">8</button>
-                  <button class="dropdown-item" href="#">9</button>
-                  <button class="dropdown-item" href="#">10</button>
-                  <button class="dropdown-item" href="#">11</button>
-                  <button class="dropdown-item" href="#">12</button>
-                  <button class="dropdown-item" href="#">13</button>
-                  <button class="dropdown-item" href="#">14</button>
-                  <button class="dropdown-item" href="#">15</button>
-                  <button class="dropdown-item" href="#">16</button>
-                  <button class="dropdown-item" href="#">17</button>
-                  <button class="dropdown-item" href="#">18</button>
-                  <button class="dropdown-item" href="#">19</button>
-                  <button class="dropdown-item" href="#">20</button>
-                  <button class="dropdown-item" href="#">21</button>
-                  <button class="dropdown-item" href="#">22</button>
-                  <button class="dropdown-item" href="#">23</button>
-                  <button class="dropdown-item" href="#">24</button>
-                  <button class="dropdown-item" href="#">25</button>
-                  <button class="dropdown-item" href="#">26</button>
-                  <button class="dropdown-item" href="#">27</button>
-                  <button class="dropdown-item" href="#">28</button>
-                  <button class="dropdown-item" href="#">29</button>
-                  <button class="dropdown-item" href="#">30</button>
-                  <button class="dropdown-item" href="#">31</button>
-                </div>
-              </div>
-              <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Year
-                </a>
-              
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <button class="dropdown-item" href="#">2022</button>
-                  <button class="dropdown-item" href="#">2023</button>
-                  <button class="dropdown-item" href="#">2024</button>
-                </div>
-              </div>
-              <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Time
-                </a>
-              
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <button class="dropdown-item" href="#">12:00 am</button>
-                  <button class="dropdown-item" href="#">12:30 am</button>
-                  <button class="dropdown-item" href="#">1:00 am</button>
-                  <button class="dropdown-item" href="#">1:30 am</button>
-                  <button class="dropdown-item" href="#">2:00 am</button>
-                  <button class="dropdown-item" href="#">2:30 am</button>
-                  <button class="dropdown-item" href="#">3:00 am</button>
-                  <button class="dropdown-item" href="#">3:30 am</button>
-                  <button class="dropdown-item" href="#">4:00 am</button>
-                  <button class="dropdown-item" href="#">4:30 am</button>
-                  <button class="dropdown-item" href="#">5:00 am</button>
-                  <button class="dropdown-item" href="#">5:30 am</button>
-                  <button class="dropdown-item" href="#">6:00 am</button>
-                  <button class="dropdown-item" href="#">6:30 am</button>
-                  <button class="dropdown-item" href="#">7:00 am</button>
-                  <button class="dropdown-item" href="#">7:30 am</button>
-                  <button class="dropdown-item" href="#">8:00 am</button>
-                  <button class="dropdown-item" href="#">8:30 am</button>
-                  <button class="dropdown-item" href="#">9:00 am</button>
-                  <button class="dropdown-item" href="#">9:30 am</button>
-                  <button class="dropdown-item" href="#">10:00 am</button>
-                  <button class="dropdown-item" href="#">10:30 am</button>
-                  <button class="dropdown-item" href="#">11:00 am</button>
-                  <button class="dropdown-item" href="#">11:30 am</button>
-                  <button class="dropdown-item" href="#">12:00 pm</button>
-                  <button class="dropdown-item" href="#">12:30 pm</button>
-                  <button class="dropdown-item" href="#">1:00 pm</button>
-                  <button class="dropdown-item" href="#">1:30 pm</button>
-                  <button class="dropdown-item" href="#">2:00 pm</button>
-                  <button class="dropdown-item" href="#">2:30 pm</button>
-                  <button class="dropdown-item" href="#">3:00 pm</button>
-                  <button class="dropdown-item" href="#">3:30 pm</button>
-                  <button class="dropdown-item" href="#">4:00 pm</button>
-                  <button class="dropdown-item" href="#">4:30 pm</button>
-                  <button class="dropdown-item" href="#">5:00 pm</button>
-                  <button class="dropdown-item" href="#">5:30 pm</button>
-                  <button class="dropdown-item" href="#">6:00 pm</button>
-                  <button class="dropdown-item" href="#">6:30 pm</button>
-                  <button class="dropdown-item" href="#">7:00 pm</button>
-                  <button class="dropdown-item" href="#">7:30 pm</button>
-                  <button class="dropdown-item" href="#">8:00 pm</button>
-                  <button class="dropdown-item" href="#">8:30 pm</button>
-                  <button class="dropdown-item" href="#">9:00 pm</button>
-                  <button class="dropdown-item" href="#">9:30 pm</button>
-                  <button class="dropdown-item" href="#">10:00 pm</button>
-                  <button class="dropdown-item" href="#">10:30 pm</button>
-                  <button class="dropdown-item" href="#">11:00 pm</button>
-                  <button class="dropdown-item" href="#">11:30 pm</button>
-                </div>
-              </div>
-          </div>
-
+    <div class="date-selection">
+      <h1>Due Date</h1>
+      <div class="reminder-date">
+        <div class="month">
+          <h6>Month</h6>
+          <input class="month"type="text">
         </div>
-        <div class="row justify-content-center">
-          <button class="btn btn-secondary col-2" role="button">No Reminder</button>
+        <div class="day">
+          <h6>Day</h6>
+          <input class="month"type="text">
+        </div>
+        <div class="year">
+          <h6>Year</h6>
+          <input class="month"type="text">
+        </div>
+        <div class="time">
+          <h6>Hour</h6>
+          <input class="month"type="text">
+        </div>
+        <div>
+          <h6>Minute</h6>
+          <input class="month"type="text">
+        </div>
+        <div class="dropdown-menu">
+          <button class="dropdown-menu-button ampm">AM/PM</button>
+          <div class="dropdown-content ampmbutton">
+            <button class="ampmbutton">AM</button>
+            <button class="ampmbutton">PM</button>
+          </div>
         </div>
       </div>
-      <div id="button_selection" class="row">
-        <div class="d-flex justify-content-center">
-          <button id="save_assessment" class="btn btn-primary col-2" role="button" disabled>Save</button>
-          <a class="btn btn-secondary col-2" role="button" href="index.html">Cancel</a>
+      <h6>ex. 04/20/20 4:20 am</h6>
+    </div>
+    <div class="date-selection">
+      <h1>Reminder Date</h1>
+      <div class="reminder-date">
+        <div class="month">
+          <h6>Month</h6>
+          <input class="month"type="text">
         </div>
-      </div> -->
+        <div class="day">
+          <h6>Day</h6>
+          <input class="month"type="text">
+        </div>
+        <div class="year">
+          <h6>Year</h6>
+          <input class="month"type="text">
+        </div>
+        <div class="time">
+          <h6>Hour</h6>
+          <input class="month"type="text">
+        </div>
+        <div>
+          <h6>Minute</h6>
+          <input class="month"type="text">
+        </div>
+        <div class="dropdown-menu">
+          <button class="dropdown-menu-button ampm">AM/PM</button>
+          <div class="dropdown-content ampmbutton">
+            <button class="ampmbutton">AM</button>
+            <button class="ampmbutton">PM</button>
+          </div>
+        </div>
+      </div>
+      <h6>ex. 04/20/20 4:20 am</h6>
+      <button id="save-discard" role="button" onclick="saveAssessment()">Save</button>
+    </div>
+    <div class="save-or-discard">
+      <button class="save" role="button" onclick="saveAssessment()">Save</button>
+      <button class="discard" role="button" onclick="saveAssessment()">Discard</button>
+    </div>
     <script src="js/add_assignment.js" defer></script>
 </body>
 </html>

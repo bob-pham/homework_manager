@@ -1,8 +1,18 @@
 #header {
     display: grid;
     place-items: center;
+    margin: 0;
 }
 
 #header h1 {
-    font-family: Bebas Neue;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    margin: 0;
 }
+
+#header h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    margin: 0;
+}
+

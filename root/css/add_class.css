@@ -1,8 +1,8 @@
-.btn {
-    width: 100%;
-    margin-top: 5%;
-    margin-bottom: 5%;
+:root {
+    --dark-button: #282b30;
+    --important-button-blue: #008ecf;
 }
+
 
 #create_assessment {
     display: None;
@@ -14,4 +14,19 @@
 
 #syllabus {
     display: None;
+}
+
+.dropdown-menu {
+
+}
+
+.dropdown-menu button {
+    background-color: var(--important-button-blue);
+    color: white;
+    padding: 1vh;
+}
+
+.add-assignment-container {
+    display: grid;
+    place-items: center;
 }

@@ -4,13 +4,81 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css\styles.css">
-    <title>class</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/class.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <title>Class Details</title>
 </head>
 <body>
-    <div id="header"></div>
-    <div id="recently-deleted">
-        <div id="upcoming-tasks"></div>
+    <div id="header">
+        <h1>
+            Homework Manager
+        </h1>
+        <h6>
+            V1.0.0
+        </h6>
+        <h6 id="subheading">
+         Class Name
+        </h6>
+    </div>
+    <div class="add-assessment-form">
+        <label for="">Assessment Name</label>
+        <input type="text">
+        <label for="">Assessment Weight</label>
+        <input type="text">
+        <button>Add</button>
+    </div>
+    <div class="syllabus">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td id="name"></td>
+                <td id="weight"></td>
+            </tbody>
+        </table>
+    </div>
+    <div class="upcoming-tasks" id="upcoming-tasks">
+        <table>
+            <thead>
+                <tr>
+                    <th>Upcoming Task</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td id="Name"></td>
+                <td id="Date"></td>
+            </tbody>
+        </table>
+    </div>
+    <div class="recently-deleted" id="recently-deleted">
+        <table>
+            <thead>
+                <tr>
+                    <th>Recently Deleted</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td id="name"></td>
+            </tbody>
+        </table>
+    </div>
+    <div class="buttons">
+        <button>Edit</button>
+        <button>Recently Deleted</button>
+        <button> Exit </button>
     </div>
 </body>
 </html>

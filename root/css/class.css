@@ -1,0 +1,58 @@
+.add-assessment-form {
+    display: none;
+    place-items: center;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 3vh;
+    font-size: 1.5rem;
+}
+
+.add-assessment-form button {
+    width: 10vw;
+    margin: 1vh;
+    color: white;
+    background-color: var(--dark-button);
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.syllabus {
+    display: grid;
+    place-items: center;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.syllabus table {
+    width: 50vw;
+}
+
+.recently-deleted {
+    display: none;
+    place-items: center;
+}
+
+.recently-deleted table {
+    width: 25vw;
+}
+
+.upcoming-tasks {
+    display: grid;
+    place-items: center;
+}
+
+.upcoming-tasks table {
+    width: 25vw;
+}
+
+.buttons {
+    display: grid;
+    place-items: center;
+}
+
+.buttons button {
+    width: 10vw;
+    margin: 1vh;
+    color: white;
+    background-color: var(--dark-button);
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}

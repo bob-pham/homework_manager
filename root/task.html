@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/task.css">
+    <link rel="stylesheet" href="css/header.css">
+    <title>Task viewer</title>
+</head>
+<body>
+    <div id="header">
+        <h1>
+            Homework Manager
+        </h1>
+        <h6>
+            V1.0.0
+        </h6>
+        <h6 id="subheading">
+         Task Name
+        </h6>
+        <h6>Due Date: </h6>
+        <h6>Reminder Date: </h6>
+    </div>
+    <h6 id="no-subtasks">This task does not include any subtasks</h6>
+    <div class="subtasks">
+        <h2>Subtasks:</h2>
+        <table id="upcoming" class="tasks-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td id="name"></td>
+                <td id="status"></td>
+            </tbody>
+        </table>
+    </div>        
+</body>
+</html>

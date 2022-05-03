@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0", shrink-to-fit="no">    
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/add_class.css">
-    <link rel="stylesheet" href="css/dropdown.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/add_class.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -31,13 +31,14 @@
     <div class="class-name-container">
         <label for="name">Class Name:</label>
         <input type="text" class="form-control" id="name">
+        <button id="save-class-name">Save</button>
     </div>
     <div class="add-assessment-form">
         <label for="">Assessment Name</label>
-        <input type="text">
-        <label for="">Assessment Weight</label>
-        <input type="text">
-        <button>Add</button>
+        <input type="text" id="assessment-name">
+        <label for="" >Assessment Weight</label>
+        <input type="text" id="assessment-weight">
+        <button id="add-assessment">Add</button>
     </div>
     <div class="syllabus">
         <table>
@@ -54,9 +55,9 @@
         </table>
     </div>
     <div class="save-or-discard">
-        <button class="save" role="button" onclick="saveAssessment()">Save</button>
-        <button class="discard" role="button" onclick="saveAssessment()">Discard</button>
+        <button class="save" role="button" id="save-changes">Save</button>
+        <button class="discard" role="button" id="discard-changes">Discard</button>
     </div>
-    <script src="js/add_class.js" defer></script>
+    <script src="../js/add_class.js" defer></script>
 </body>
 </html>

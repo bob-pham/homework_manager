@@ -88,3 +88,12 @@
     cursor: pointer;
     text-align: center;
   }  
+
+  .class-name-container button {
+    width: 10vw;
+    margin: 1vh;
+    color: white;
+    background-color: var(--dark-button);
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}

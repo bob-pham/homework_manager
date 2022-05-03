@@ -235,6 +235,10 @@ class Task {
     getParent(){
         return this._parentTask;     
     }
+
+    getPriority() {
+        return this._priority;
+    }
     
     /**
      * 
@@ -272,3 +276,91 @@ class Task {
         this._subtasks.append(subtask);
     }
 }
+
+class PriorityQueue {
+    _values;
+
+    constructor() {
+        this._values = [];
+    }
+
+    
+ dequeue() {
+    // store the root node to return at end
+    const min = this._values[0];
+    // pop the last node in array and set as the new head
+    const end = this._values.pop();
+    if(this._values.length > 0) {
+      this._values[0] = end;
+      
+      // store variables we will use to check
+      let index = 0;
+      const length = this._values.length;
+      const element = this._values[0];
+      
+      while(true) {
+        let leftIndex = 2 * index + 1;
+        let rightIndex = 2 * index + 2;
+        let leftChild, rightChild;
+        let swap = null;
+
+        // check if there is a left child
+        if(leftIndex < length) {
+          leftChild = this._values[leftIndex];
+          // compare the priority level of the left child
+          if(leftChild.getPriority() < element._getPriority()) {
+            swap = leftIndex;
+          }
+        }
+        
+        // check if there is a right child
+        if(rightIndex < length) {
+          rightChild = this._values[rightIndex];
+          // compare the priority level of the right child
+          if((swap === null && rightChild.getPriority() < element.getPriority()) || (swap !== null && rightChild.getPriority() < leftChild.getPriority())) {
+            swap = rightIndex;
+          }
+        }
+        
+        // if no swaps were done, we will break out of the while loop
+        if(swap === null) break;
+        this.values[index] = this.values[swap];
+        this.values[swap] = element;
+        index = swap;
+      }
+    }
+    return min;
+  }
+  
+   enqueue(node) {
+    // push the new node into the values array
+    this._values.push(node);
+
+    // store the index and the node of the new node
+    let index = this._values.length - 1;
+    const element = this._values[index];
+    
+    // initialize a while loop to run while inserted node is not at the root
+    while(index > 0) {
+      // store the index and node of the parent
+      let parentIndex = Math.floor((index - 1) / 2);
+      const parent = this._values[parentIndex];
+      
+      // compare the priority of the inserted and parent
+      if(element.getPriority() >= parent.getPriority()) break;
+      this._values[parentIndex] = element;
+      this._values[index] = parent;
+      index = parentIndex;
+    }
+    return this._values;
+  }
+
+  isEmpty() {
+      return this._values.length == 0;
+  }
+
+
+
+
+
+} 

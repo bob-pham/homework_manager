@@ -11,7 +11,8 @@ class Course {
      */
     constructor() {
         this._syllabus = {};
-        this.grades = {};
+        this._grades = {};
+        this._name = "no name";
     }
 
     setName(name) {
@@ -31,7 +32,7 @@ class Course {
     }
  
     getSyllabus() {
-        return this.syllabus;
+        return this._syllabus;
     }
 
     addAssessment(assessment) {
@@ -129,9 +130,9 @@ class Assessment {
         return this._accounted_for;
     }
 
-    getName() {
-       return this._name;
-    }
+    // getName() {
+    //    return this._name;
+    // }
 
     getWeight() {
        return this._weight;
@@ -187,7 +188,7 @@ class Task {
         this._name = name;
     }
 
-    setgrade(grade){
+    setGrade(grade){
         this._grade = grade;
     }
 
@@ -211,9 +212,9 @@ class Task {
         this._parentTask = parent;
     }
 
-    getName(){
-        return this._name;     
-    }
+    // getName(){
+    //     return this._name;     
+    // }
 
     getGrade(){
         return this._grade;     
@@ -266,7 +267,7 @@ class Task {
         this._grade += grade / this._subtasks.length;
     }
 
-    setParent(parent) {
+    set Parent(parent) {
         this._parentTask = parent;
     }
 
@@ -360,34 +361,68 @@ class PriorityQueue {
 
 } 
 
-let currentClass;
 let currentAssessment;
-let classes = [];
+let classes = {};
+let classNames = [];
 
-let temp = ["fuasd", "asdfase", "asdfas", "ahh"];
+let selectedClass;
 
+let temp = ["CPSC 213", "CPSC 210", "CPSC 221", "CPSC 110"];
 
 
 function addClass() {
 
-    for (let item in temp) {
-        let frick = new Course();
-        frick.setName(item);
-        classes.push(frick);
-        console.log("asdf");
-    }
-    
-
     let dropdown = document.getElementById('class-dropdown');
 
-    for (let course in classes) {
+    for (let i = 0; i < classNames.length; i++) {
         let button = document.createElement("button");
-        button.name = "asdfasdf";
         button.type = "button";
-        button.textContent = "asl;fkjasdf"
+        button.textContent = classNames[i];
+        button.onclick = function() {
+            selectedClass = classes[classNames[i]];
+            document.getElementById('assessments').setAttribute('style', 'display: inline');
+            document.getElementById('class-name').textContent = "Class: " + classNames[i];
+            document.getElementById('class-name').setAttribute('style', 'display: inline');
+            chooseAssessment();
+        }
 
         dropdown.appendChild(button);
     }
 }
 
+function chooseAssessment() {
+    let dropdown = document.getElementById('assessment-dropdown');
+    let syllabus = selectedClass.getSyllabus();
+
+    console.log(selectedClass);
+
+    for (let key in syllabus) {
+        let button = document.createElement("button");
+        button.type = "button";
+        button.textContent = key;
+        button.onclick = function() {
+            document.getElementById('due-date-selection').setAttribute('style', 'display: inline');
+            document.getElementById('reminder-date-selection').setAttribute('style', 'display: inline');
+            document.getElementById('assessment-name').textContent = "Assessment: " + key + "   : Weight: " + syllabus[key];
+            document.getElementById('assessment-name').setAttribute('style', 'display: inline');
+        }
+
+        dropdown.appendChild(button);
+    }
+
+}
+
+function initializeClasses() {
+    //currently temporary since no memory
+    for (let i = 0; i < temp.length; i++) {
+        let item = new Course();
+        item.setName(temp[i]);
+        let tempMap = {ahhh: "ahhhh"};
+        item._syllabus = tempMap;
+        classes[temp[i]] = item;
+        classNames.push(temp[i]); 
+    }
+}
+
+initializeClasses();
 addClass();

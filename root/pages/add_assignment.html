@@ -36,12 +36,12 @@
         <a href="add_class.html">Add Class</a>
       </div>
     </div>
-    <div class="assessment-container">
+    <div id="assessments" class="assessment-container">
       <div class="dropdown-menu">
         <button class="dropdown-menu-button" type="button" id="dropdownMenuButton">
           Assessment
         </button>
-        <div class="dropdown-content">
+        <div id="assessment-dropdown" class="dropdown-content">
           <button >Add Assessment / Edit Syllabus</button>
         </div>
       </div>
@@ -60,7 +60,7 @@
         <button id="save-discard" role="button" onclick="makeInvisible(add_assessment)">Discard</button>
       </div>
     </div>
-    <div class="date-selection">
+    <div id="due-date-selection" class="date-selection">
       <h1>Due Date</h1>
       <div class="reminder-date">
         <div class="month">
@@ -93,7 +93,7 @@
       </div>
       <h6>ex. 04/20/20 4:20 am</h6>
     </div>
-    <div class="date-selection">
+    <div id="reminder-date-selection" class="date-selection">
       <h1>Reminder Date</h1>
       <div class="reminder-date">
         <div class="month">
@@ -130,6 +130,12 @@
     <div class="save-or-discard">
       <button class="save" role="button" onclick="saveAssessment()">Save</button>
       <button class="discard" role="button" onclick="saveAssessment()">Discard</button>
+    </div>
+    <div class="current-display">
+      <h6 id="class-name">temp</h6>
+      <h6 id="assessment-name">temp</h6>
+      <h6 id="due-date">temp</h6>
+      <h6 id="reminder-date">temp</h6>
     </div>
     <script src="../js/add_assignment.js" defer></script>
 </body>

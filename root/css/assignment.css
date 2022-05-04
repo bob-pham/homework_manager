@@ -136,6 +136,15 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
   margin: 0.5vh;
+  margin-bottom: 3vh;
   cursor: pointer;
   text-align: center;
+}
+
+.current-display h6 {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1vw;
+  margin: 1vh;
+  display: none;
 }

@@ -97,3 +97,16 @@
     font-size: 1rem;
     font-family: 'Montserrat', sans-serif;
 }
+
+.class-name-container h6 {
+    display: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2vh;
+    color: green;
+    margin: 0;
+}
+
+#syllabus-table td {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}

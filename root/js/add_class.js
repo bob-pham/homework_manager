@@ -162,7 +162,8 @@ class Assessment {
 
 let newClass = new Course();
 let classes;
-const numbersRegex = new RegExp('^[0-9]+');
+let currentWeight = 0;
+const numbersRegex = /^\d+$/;
 
 
 /**
@@ -175,6 +176,12 @@ function saveClassName() {
     
     if (name) {
         newClass.setName(name);
+        document.getElementById('saved-message').setAttribute('style', 'display: block');
+
+        setTimeout(function () {
+            document.getElementById('saved-message').setAttribute('style', 'display: none');
+        }, 5000);
+
     } else {
         alert("Please enter class name");
     }    
@@ -185,18 +192,26 @@ function setAssignment() {
     let assessmentWeight = document.getElementById("assessment-weight").value;
 
     if (assessmentName) {
+        console.log(currentWeight);
         if (assessmentWeight && numbersRegex.test(assessmentWeight)) {
-            let assessment = new Assessment();
-            assessment.setName(assessmentName);
-            assessment.setWeight(assessmentWeight);
-
-            newClass.addAssessment(assessment);
-
-            console.log("success!")
-            document.getElementById("assessment-name").value = "";
-            document.getElementById("assessment-weight").value = "";
-            //TODO add this to the GUI
-
+            assessmentWeight = parseInt(assessmentWeight);
+            if (assessmentWeight > 100) {
+                alert("Please enter valid assessment weight (too high!)");
+            } else if (assessmentWeight + currentWeight > 100) {
+                alert("Weights add to over 100%!");
+            } else {
+                currentWeight += assessmentWeight;
+                let assessment = new Assessment();
+                assessment.setName(assessmentName);
+                assessment.setWeight(assessmentWeight);
+    
+                newClass.addAssessment(assessment);
+    
+                document.getElementById("assessment-name").value = "";
+                document.getElementById("assessment-weight").value = "";
+    
+                addRow(assessmentName, assessmentWeight);
+            }
         } else {
             alert("Please enter valid assessment weight (%)")
         }
@@ -204,6 +219,17 @@ function setAssignment() {
         alert("Please enter assessment name")
     }
 }
+
+function addRow(name, weight) {
+    let table = document.getElementById("syllabus-table");
+    let newRow = table.rows[1].cloneNode(true);
+    let len = table.rows.length;
+    newRow.cells[0].innerHTML = name;
+    newRow.cells[1].innerHTML = weight;
+
+    table.appendChild(newRow);
+}
+
 
 function saveChanges() {
     chrome.storagte.sync.set({"classes" : classes});
@@ -224,6 +250,8 @@ function discardClass() {
 document.getElementById("save-class-name").addEventListener("click", saveClassName, false);
 document.getElementById("add-assessment").addEventListener("click", setAssignment, false);
 document.getElementById("discard-changes").addEventListener("click", discardClass, false);
+
+
 chrome.storage.sync.get(["classes"], function(result) {
     classes = result;
 });

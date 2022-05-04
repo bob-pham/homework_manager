@@ -32,20 +32,21 @@
         <label for="name">Class Name:</label>
         <input type="text" class="form-control" id="name">
         <button id="save-class-name">Save</button>
+        <h6 id="saved-message">Saved!</h6>
     </div>
     <div class="add-assessment-form">
         <label for="">Assessment Name</label>
         <input type="text" id="assessment-name">
-        <label for="" >Assessment Weight</label>
-        <input type="text" id="assessment-weight">
+        <label for="" >Assessment Weight (%)</label>
+        <input type="number" min="0" step="1" id="assessment-weight">
         <button id="add-assessment">Add</button>
     </div>
     <div class="syllabus">
-        <table>
+        <table id="syllabus-table">
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Weight</th>
+                    <th>Weight (%)</th>
                 </tr>
             </thead>
             <tbody>

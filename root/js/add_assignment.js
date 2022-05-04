@@ -147,7 +147,7 @@ class Assessment {
      * 
      */
     calculateGrade(grade) {
-        this.grades.append(grade);
+        this.grades.push(grade);
         temp = 0;
         
         for (let marks in grades) {
@@ -272,7 +272,7 @@ class Task {
 
     addSubtask(subtask) {
         subtasks.setParent(this);
-        this._subtasks.append(subtask);
+        this._subtasks.push(subtask);
     }
 }
 
@@ -359,3 +359,35 @@ class PriorityQueue {
   }
 
 } 
+
+let currentClass;
+let currentAssessment;
+let classes = [];
+
+let temp = ["fuasd", "asdfase", "asdfas", "ahh"];
+
+
+
+function addClass() {
+
+    for (let item in temp) {
+        let frick = new Course();
+        frick.setName(item);
+        classes.push(frick);
+        console.log("asdf");
+    }
+    
+
+    let dropdown = document.getElementById('class-dropdown');
+
+    for (let course in classes) {
+        let button = document.createElement("button");
+        button.name = "asdfasdf";
+        button.type = "button";
+        button.textContent = "asl;fkjasdf"
+
+        dropdown.appendChild(button);
+    }
+}
+
+addClass();

@@ -31,7 +31,7 @@ class Course {
     }
  
     getSyllabus() {
-        return this.syllabus;
+        return this._syllabus;
     }
 
     addAssessment(assessment) {

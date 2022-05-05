@@ -30,7 +30,8 @@
   <div class="add-assignment-container">
     <h6>Task Name</h6>
     <input type="text" name="" id="task-name">
-    <div class="dropdown-menu">
+    <h6 id="loading-class" class="loading-message">Loading Classes...</h6>
+    <div id="class-selector" class="dropdown-menu">
       <button class="dropdown-menu-button">
         Class
       </button>
@@ -88,8 +89,8 @@
         <div class="dropdown-menu">
           <button id="due-ampm" class="dropdown-menu-button ampm">AM/PM</button>
           <div class="dropdown-content ampmbutton">
-            <button class="ampmbutton">AM</button>
-            <button class="ampmbutton">PM</button>
+            <button id="due-am" class="ampmbutton">AM</button>
+            <button id="due-pm" class="ampmbutton">PM</button>
           </div>
         </div>
       </div>
@@ -121,16 +122,15 @@
         <div class="dropdown-menu">
           <button id="reminder-ampm" class="dropdown-menu-button ampm">AM/PM</button>
           <div class="dropdown-content ampmbutton">
-            <button class="ampmbutton">AM</button>
-            <button class="ampmbutton">PM</button>
+            <button id="reminder-am" class="ampmbutton">AM</button>
+            <button id="reminder-pm" class="ampmbutton">PM</button>
           </div>
         </div>
       </div>
       <h6>ex. 04/20/22 4:20 am</h6>
-      <button id="save-discard" role="button" onclick="saveAssessment()">Save</button>
     </div>
     <div class="save-or-discard">
-      <button id="save" class="save" role="button" onclick="saveAssessment()">Save</button>
+      <button id="save" class="save" role="button">Save</button>
       <button id="discard" class="discard" role="button">Discard</button>
     </div>
     <div class="current-display">

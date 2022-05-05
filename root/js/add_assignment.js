@@ -36,8 +36,13 @@ class Course {
     }
 
     addAssessment(assessment) {
-        this._syllabus.push(assessment);
+        this._syllabus[assessment.getName()] = assessment;
     }
+
+    getAssesssment(assessmentName) {
+        return this._syllabus[assessmentName];
+    }
+
 
     getCurrentGrade() {
         return 100 * this._numerator / this._denominator;
@@ -173,7 +178,7 @@ class Task {
     _priority; // the priority value of the task
 
 
-    constructor(name, course, assessment, forMarks) {
+    constructor(name, course, assessment, forMarks, dueDate, reminderDate) {
         this._name = name;
         this._class = course;
         this._assessment = assessment;
@@ -182,6 +187,8 @@ class Task {
         this._parentTask = null;
         this._subtasks = [];
         this._forMarks = forMarks;
+        this._dueDate = dueDate;
+        this._reminderDate = reminderDate;
     }
 
     setName(name){
@@ -212,9 +219,9 @@ class Task {
         this._parentTask = parent;
     }
 
-    // getName(){
-    //     return this._name;     
-    // }
+    getName(){
+        return this._name;     
+    }
 
     getGrade(){
         return this._grade;     
@@ -276,90 +283,7 @@ class Task {
         this._subtasks.push(subtask);
     }
 }
-
-class PriorityQueue {
-    _values;
-
-    constructor() {
-        this._values = [];
-    }
-
-    
- dequeue() {
-    // store the root node to return at end
-    const min = this._values[0];
-    // pop the last node in array and set as the new head
-    const end = this._values.pop();
-    if(this._values.length > 0) {
-      this._values[0] = end;
-      
-      // store variables we will use to check
-      let index = 0;
-      const length = this._values.length;
-      const element = this._values[0];
-      
-      while(true) {
-        let leftIndex = 2 * index + 1;
-        let rightIndex = 2 * index + 2;
-        let leftChild, rightChild;
-        let swap = null;
-
-        // check if there is a left child
-        if(leftIndex < length) {
-          leftChild = this._values[leftIndex];
-          // compare the priority level of the left child
-          if(leftChild.getPriority() < element._getPriority()) {
-            swap = leftIndex;
-          }
-        }
-        
-        // check if there is a right child
-        if(rightIndex < length) {
-          rightChild = this._values[rightIndex];
-          // compare the priority level of the right child
-          if((swap === null && rightChild.getPriority() < element.getPriority()) || (swap !== null && rightChild.getPriority() < leftChild.getPriority())) {
-            swap = rightIndex;
-          }
-        }
-        
-        // if no swaps were done, we will break out of the while loop
-        if(swap === null) break;
-        this.values[index] = this.values[swap];
-        this.values[swap] = element;
-        index = swap;
-      }
-    }
-    return min;
-  }
-  
-   enqueue(node) {
-    // push the new node into the values array
-    this._values.push(node);
-
-    // store the index and the node of the new node
-    let index = this._values.length - 1;
-    const element = this._values[index];
-    
-    // initialize a while loop to run while inserted node is not at the root
-    while(index > 0) {
-      // store the index and node of the parent
-      let parentIndex = Math.floor((index - 1) / 2);
-      const parent = this._values[parentIndex];
-      
-      // compare the priority of the inserted and parent
-      if(element.getPriority() >= parent.getPriority()) break;
-      this._values[parentIndex] = element;
-      this._values[index] = parent;
-      index = parentIndex;
-    }
-    return this._values;
-  }
-
-  isEmpty() {
-      return this._values.length == 0;
-  }
-
-} 
+ 
 
 let currentAssessment;
 let classes = {};
@@ -367,6 +291,9 @@ let classNames = [];
 const numbersRegex = /^\d+$/;
 
 let selectedClass;
+let selectedAssessment;
+let dueAm = false;
+let reminderAm = false;
 
 let temp = ["CPSC 213", "CPSC 210", "CPSC 221", "CPSC 110"];
 
@@ -404,10 +331,12 @@ function chooseAssessment() {
         button.type = "button";
         button.textContent = key;
         button.onclick = function() {
+            selectedAssessment = selectedClass.getAssesssment(key);
             document.getElementById('due-date-selection').setAttribute('style', 'display: grid');
             document.getElementById('reminder-date-selection').setAttribute('style', 'display: grid');
             document.getElementById('assessment-name').textContent = "Assessment: " + key + "   : Weight: " + syllabus[key];
             document.getElementById('assessment-name').setAttribute('style', 'display: grid');
+            document.getElementById('save').setAttribute('style', 'display: grid');
         }
 
         dropdown.appendChild(button);
@@ -441,19 +370,6 @@ function insertAssessment() {
         }
     } else {
         alert("Please enter assessment name")
-    }
-}
-
-
-function initializeClasses() {
-    //currently temporary since no memory
-    for (let i = 0; i < temp.length; i++) {
-        let item = new Course();
-        item.setName(temp[i]);
-        let tempMap = {ahhh: "ahhhh"};
-        item._syllabus = tempMap;
-        classes[temp[i]] = item;
-        classNames.push(temp[i]); 
     }
 }
 
@@ -523,8 +439,11 @@ function saveChanges() {
 
             let newDueDate = dueAm ? new Date(dueYear, dueMonth, dueDay, dueHour, dueMinute) : new Date(dueYear, dueMonth, dueDay, dueHour + 12, dueMinute);
             let newReminderDate = reminderAm ? new Date(reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute) : new Date(reminderYear, reminderMonth, reminderDay, reminderHour + 12, reminderMinute); 
-
+            let makeTask = new Task(taskName, selectedClass, selectedAssessment, false, newDueDate, newReminderDate);
             
+            sessionStorage.setItem('newTask', makeTask);
+            sessionStorage.setItem('hasNewTask', true);
+            location.href = "../index.html";
         }
     }
 }
@@ -533,9 +452,50 @@ function testValidDateEntry(entry, boundlower, boundupper) {
     return entry && numbersRegex.test(entry) && parseInt(entry) >= boundlower && parseInt(entry) <= boundupper;
 }
 
+function initializeClasses() {
+    //currently temporary since no memory
+    for (let i = 0; i < temp.length; i++) {
+        let item = new Course();
+        item.setName(temp[i]);
+        let tempMap = {ahhh: "ahhhh"};
+        item._syllabus = tempMap;
+        classes[temp[i]] = item;
+        classNames.push(temp[i]); 
+    }
+    addClass();
+    document.getElementById('loading-class').setAttribute('style', 'display: none');
+    document.getElementById('class-selector').setAttribute('style', 'display:grid'); 
+}
+
+function initialize() {
+    chrome.storage.sync.get(['classes'], function(result) {
+        classes = result;
+
+        let dropdown = document.getElementById('class-dropdown');
+
+        for (let course in classes) {
+            let button = document.createElement("button");
+            let name = course.getName();
+            button.type = "button";
+            button.textContent = name;
+
+            button.onclick = function() {
+                selectedClass = classes[name];
+                document.getElementById('assessments').setAttribute('style', 'display: inline');
+                document.getElementById('class-name').textContent = "Class: " + name;
+                document.getElementById('class-name').setAttribute('style', 'display: inline');
+                chooseAssessment();
+            }
+            dropdown.appendChild(button);
+        }
+
+        document.getElementById('loading-class').setAttribute('style', 'display: none');
+    });
+}
+
 
 initializeClasses();
-addClass();
+// initialize();
 
 document.getElementById('add-new-assessment').addEventListener("click", function() {
     document.getElementById('create_ass_form').setAttribute('style', 'display: block');
@@ -550,5 +510,24 @@ document.getElementById('discard-new-assessment').addEventListener("click", func
 }, false);
 
 document.getElementById('discard').addEventListener("click", function() {
+    sessionStorage.setItem('hasNewTask', false);
     location.href = "../index.html";
 }, false);
+
+document.getElementById('save').addEventListener("click", saveChanges, false);
+
+document.getElementById('due-am').addEventListener("click", function() {
+    dueAm = true;
+});
+
+document.getElementById('due-pm').addEventListener("click", function() {
+    duePm = false;
+});
+
+document.getElementById('reminder-am').addEventListener("click", function() {
+    reminderAm = true;
+});
+
+document.getElementById('reminder-pm').addEventListener("click", function() {
+    reminderPm = false;
+})

@@ -154,3 +154,16 @@
   margin: 1vh;
   display: none;
 }
+
+.loading-message {
+  font-family: sans-serif;
+  font-size: 2vh !important;
+  color: green;
+}
+
+#saving {
+  font-family: sans-serif;
+  font-size: 2vh !important;
+  color: green;
+  display: none;
+}

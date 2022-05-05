@@ -227,7 +227,6 @@ function setAssignment() {
 function addRow(name, weight) {
     let table = document.getElementById("syllabus-table");
     let newRow = table.rows[1].cloneNode(true);
-    let len = table.rows.length;
     newRow.cells[0].innerHTML = name;
     newRow.cells[1].innerHTML = weight;
 

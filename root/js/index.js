@@ -219,6 +219,14 @@ class Task {
         this._parentTask = parent;
     }
 
+    setDueDate(date) {
+        this._dueDate = date;
+    }
+
+    setReminderDate(date) {
+        this._reminderDate = date;
+    }
+
     getName(){
         return this._name;     
     }
@@ -245,6 +253,18 @@ class Task {
 
     getPriority() {
         return this._priority;
+    }
+
+    getDueDate() {
+        return this._dueDate;
+    }
+
+    getReminderDate() {
+        return this._reminderDate;
+    }
+
+    getFormattedDueDate() {
+        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
     }
     
     /**
@@ -301,7 +321,15 @@ class PriorityQueue {
         this._values = [];
     }
 
-    
+    setQueue(queue) {
+        this._values = queue;
+    }
+
+    getQueue() {
+        return this._values;
+    }
+
+
  dequeue() {
     // store the root node to return at end
     const min = this._values[0];
@@ -325,7 +353,7 @@ class PriorityQueue {
         if(leftIndex < length) {
           leftChild = this._values[leftIndex];
           // compare the priority level of the left child
-          if(leftChild.getPriority() < element._getPriority()) {
+          if(leftChild.getPriority() < element.getPriority()) {
             swap = leftIndex;
           }
         }
@@ -341,8 +369,8 @@ class PriorityQueue {
         
         // if no swaps were done, we will break out of the while loop
         if(swap === null) break;
-        this.values[index] = this.values[swap];
-        this.values[swap] = element;
+        this._values[index] = this._values[swap];
+        this._values[swap] = element;
         index = swap;
       }
     }
@@ -379,12 +407,103 @@ class PriorityQueue {
 } 
 
 let pq;
+let first 
+const TASKS_TO_SHOW = 5; //only show the 5 Tasks with the most priority
 
 function initialize() {
     pq = new PriorityQueue();
 
-    //TODO get list of tasks from storage and then continually call heapify down on it. 
+    chrome.storage.sync.get(['queue'], function(result) {
+        if (result) {
+            pq.setQueue(JSON.parse(result));
+            initializeTasks();
+        }
+    });
 
 }
 
-initialize()
+function initializeTasks() {
+    let hasNewTask = sessionStorage.getItem('hasNewTask');
+
+    if (hasNewTask) {
+        let tempQueue = new PriorityQueue();
+        let tempArray = [];
+        let count = 0;
+        let table = document.getElementById('upcoming-tasks');
+
+        if (hasNewTask == "true") {
+            let newTask = JSON.parse(sessionStorage.getItem('newTask'));
+            pq.enqueue(newTask);
+        }
+        
+        for (let x in pq.getQueue()) {
+            tempArray.push(x);
+        }
+
+        tempQueue.setQueue(tempArray);
+
+        while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
+            let tempTask = tempQueue.dequeue();
+            let newRow = table.rows[1].cloneNode(true);
+            newRow.cells[0].innerHTML = tempTask.getClass().getName();
+            newRow.cells[1].innerHTML = tempTask.getName();
+            newRow.cells[2].innerHTML = tempTask.getDueDate().toString();
+        
+            table.appendChild(newRow);
+
+        }
+         
+        
+    }
+}
+
+function tempInitialize() {
+    let tempQueue = new PriorityQueue();
+    let tempArray = [];
+    let count = 0;
+    let table = document.getElementById('upcoming');
+    
+    let course = new Course();
+    course.setName("Minecraft");
+    
+    let ass = new Assessment("Gaming", 10, course);
+
+    course.addAssessment(ass);
+
+
+    for (let i = 0; i < 10; i++) {
+        let tasker = new Task(i, course, ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5));
+        tasker._priority = i;
+        tempArray.push(tasker);
+    }
+
+    tempQueue.setQueue(tempArray);
+
+    console.log(tempArray);
+
+    while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
+        let tempTask = tempQueue.dequeue();
+        let newRow = table.rows[1].cloneNode(true);
+        let div  = document.createElement('div');
+        let markAsComplete = document.createElement('button');
+        let edit = document.createElement('button');
+
+        markAsComplete.textContent = "Mark Complete";
+        edit.textContent = "Edit Task";
+
+        div.appendChild(markAsComplete);
+        div.appendChild(edit);
+
+        newRow.cells[0].innerHTML = tempTask.getClass().getName();
+        newRow.cells[1].innerHTML = tempTask.getName();
+        newRow.cells[2].innerHTML = tempTask.getFormattedDueDate();
+        newRow.cells[3].appendChild(div);
+    
+        table.appendChild(newRow);
+    }
+}
+
+
+// initialize();
+
+tempInitialize();

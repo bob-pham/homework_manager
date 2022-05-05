@@ -135,9 +135,9 @@ class Assessment {
         return this._accounted_for;
     }
 
-    // getName() {
-    //    return this._name;
-    // }
+    getName() {
+       return this._name;
+    }
 
     getWeight() {
        return this._weight;
@@ -274,7 +274,7 @@ class Task {
         this._grade += grade / this._subtasks.length;
     }
 
-    set Parent(parent) {
+    setParent(parent) {
         this._parentTask = parent;
     }
 
@@ -282,12 +282,23 @@ class Task {
         subtasks.setParent(this);
         this._subtasks.push(subtask);
     }
+
+    /**
+     * Calculates priority using the product of the assignment weight and the time until due date
+     */
+    calculatePriority() {
+        const currentDate = new Date();
+        let difference = (currentDate.getTime() - this._dueDate.getTime()) / (1000 * 60 * 60 * 24);
+        difference *= this._assessment.getWeight();
+        this._priority = difference;
+    }
 }
  
 
 let currentAssessment;
 let classes = {};
 let classNames = [];
+let currentDate = new Date();
 const numbersRegex = /^\d+$/;
 
 let selectedClass;
@@ -317,7 +328,6 @@ function addClass() {
         dropdown.appendChild(button);
     }
 }
-
 
 /**
  * Based on selected classes will add the buttons for different asssessments found in the class
@@ -441,7 +451,9 @@ function saveChanges() {
             let newReminderDate = reminderAm ? new Date(reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute) : new Date(reminderYear, reminderMonth, reminderDay, reminderHour + 12, reminderMinute); 
             let makeTask = new Task(taskName, selectedClass, selectedAssessment, false, newDueDate, newReminderDate);
             
-            sessionStorage.setItem('newTask', makeTask);
+            makeTask.calculatePriority();
+
+            sessionStorage.setItem('newTask', JSON.stringify(makeTask));
             sessionStorage.setItem('hasNewTask', true);
             location.href = "../index.html";
         }
@@ -469,7 +481,7 @@ function initializeClasses() {
 
 function initialize() {
     chrome.storage.sync.get(['classes'], function(result) {
-        classes = result;
+        classes = JSON.parse(result);
 
         let dropdown = document.getElementById('class-dropdown');
 

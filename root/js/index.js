@@ -11,7 +11,8 @@ class Course {
      */
     constructor() {
         this._syllabus = {};
-        this.grades = {};
+        this._grades = {};
+        this._name = "no name";
     }
 
     setName(name) {
@@ -35,8 +36,13 @@ class Course {
     }
 
     addAssessment(assessment) {
-        this._syllabus.push(assessment);
+        this._syllabus[assessment.getName()] = assessment;
     }
+
+    getAssesssment(assessmentName) {
+        return this._syllabus[assessmentName];
+    }
+
 
     getCurrentGrade() {
         return 100 * this._numerator / this._denominator;
@@ -147,7 +153,7 @@ class Assessment {
      * 
      */
     calculateGrade(grade) {
-        this.grades.append(grade);
+        this.grades.push(grade);
         temp = 0;
         
         for (let marks in grades) {
@@ -172,7 +178,7 @@ class Task {
     _priority; // the priority value of the task
 
 
-    constructor(name, course, assessment, forMarks) {
+    constructor(name, course, assessment, forMarks, dueDate, reminderDate) {
         this._name = name;
         this._class = course;
         this._assessment = assessment;
@@ -181,13 +187,15 @@ class Task {
         this._parentTask = null;
         this._subtasks = [];
         this._forMarks = forMarks;
+        this._dueDate = dueDate;
+        this._reminderDate = reminderDate;
     }
 
     setName(name){
         this._name = name;
     }
 
-    setgrade(grade){
+    setGrade(grade){
         this._grade = grade;
     }
 
@@ -272,7 +280,17 @@ class Task {
 
     addSubtask(subtask) {
         subtasks.setParent(this);
-        this._subtasks.append(subtask);
+        this._subtasks.push(subtask);
+    }
+
+    /**
+     * Calculates priority using the product of the assignment weight and the time until due date
+     */
+    calculatePriority() {
+        const currentDate = new Date();
+        let difference = (currentDate.getTime() - this._dueDate.getTime()) / (1000 * 60 * 60 * 24);
+        difference *= this._assessment.getWeight();
+        this._priority = difference;
     }
 }
 
@@ -359,3 +377,14 @@ class PriorityQueue {
   }
 
 } 
+
+let pq;
+
+function initialize() {
+    pq = new PriorityQueue();
+
+    //TODO get list of tasks from storage and then continually call heapify down on it. 
+
+}
+
+initialize()

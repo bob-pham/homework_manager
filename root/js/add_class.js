@@ -9,10 +9,10 @@ class Course {
      * @param  {string} name
      * @param  {dict[string:Assessment]} syllabus
      */
-
     constructor() {
         this._syllabus = {};
-        this.grade = {};
+        this._grades = {};
+        this._name = "no name";
     }
 
     setName(name) {
@@ -32,12 +32,17 @@ class Course {
     }
  
     getSyllabus() {
-        return this.syllabus;
+        return this._syllabus;
     }
 
     addAssessment(assessment) {
-        this._syllabus[assessment.getName()] = assessment.getWeight();
+        this._syllabus[assessment.getName()] = assessment;
     }
+
+    getAssesssment(assessmentName) {
+        return this._syllabus[assessmentName];
+    }
+
 
     getCurrentGrade() {
         return 100 * this._numerator / this._denominator;
@@ -148,7 +153,7 @@ class Assessment {
      * 
      */
     calculateGrade(grade) {
-        this.grades.append(grade);
+        this.grades.push(grade);
         temp = 0;
         
         for (let marks in grades) {
@@ -164,7 +169,6 @@ let newClass = new Course();
 let classes;
 let currentWeight = 0;
 const numbersRegex = /^\d+$/;
-
 
 /**
  * 
@@ -232,7 +236,10 @@ function addRow(name, weight) {
 
 
 function saveChanges() {
-    chrome.storagte.sync.set({"classes" : classes});
+    document.getElementById('saving').setAttribute('style', 'display:inline');
+    chrome.storage.sync.set({"classes" : JSON.stringify(classes)}, function() {
+
+    });
     
     location.href = "../index.html";
 }
@@ -253,5 +260,5 @@ document.getElementById("discard-changes").addEventListener("click", discardClas
 
 
 chrome.storage.sync.get(["classes"], function(result) {
-    classes = result;
+    classes = JSON.parse(result);
 });

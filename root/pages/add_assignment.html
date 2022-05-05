@@ -28,6 +28,8 @@
       </h6>
   </div>
   <div class="add-assignment-container">
+    <h6>Task Name</h6>
+    <input type="text" name="" id="task-name">
     <div class="dropdown-menu">
       <button class="dropdown-menu-button">
         Class
@@ -42,7 +44,7 @@
           Assessment
         </button>
         <div id="assessment-dropdown" class="dropdown-content">
-          <button >Add Assessment / Edit Syllabus</button>
+          <button id="add-new-assessment">Add Assessment / Edit Syllabus</button>
         </div>
       </div>
     </div>
@@ -50,14 +52,14 @@
       <div class="edit-assessment-input">
         <div>
           <label for="name" class="sr-only">Assessment Name:</label>
-          <input type="text" class="form-control" id="ass-name">
+          <input type="text" class="form-control" id="new-ass-name">
         </div>
         <div>
           <label for="name">Assessment Weight:</label>
-          <input type="text" class="form-control" id="ass-name">
+          <input type="text" class="form-control" id="new-ass-weight">
         </div>
-        <button id="save-discard" role="button" onclick="saveAssessment()">Save</button>
-        <button id="save-discard" role="button" onclick="makeInvisible(add_assessment)">Discard</button>
+        <button id="save-new-assessment" role="button">Save Assessment</button>
+        <button id="discard-new-assessment" role="button">Discard Assessment</button>
       </div>
     </div>
     <div id="due-date-selection" class="date-selection">
@@ -65,71 +67,71 @@
       <div class="reminder-date">
         <div class="month">
           <h6>Month</h6>
-          <input class="month"type="text">
+          <input id="due-month" class="month" placeholder="4" step="1" type="number" min="1" max="12">
         </div>
         <div class="day">
           <h6>Day</h6>
-          <input class="month"type="text">
+          <input id="due-day" class="month" placeholder="20" step="1" type="number" min="1" max="31">
         </div>
         <div class="year">
           <h6>Year</h6>
-          <input class="month"type="text">
+          <input id="due-year" class="month" type="number" placeholder="2022" min="2022" step="1">
         </div>
         <div class="time">
           <h6>Hour</h6>
-          <input class="month"type="text">
+          <input id="due-hour" placeholder="4" step="1" min="1" max="12" class="month" type="number">
         </div>
         <div>
           <h6>Minute</h6>
-          <input class="month"type="text">
+          <input id="due-minute" placeholder="20" step="1" min="0" max="59"  class="month" type="number">
         </div>
         <div class="dropdown-menu">
-          <button class="dropdown-menu-button ampm">AM/PM</button>
+          <button id="due-ampm" class="dropdown-menu-button ampm">AM/PM</button>
           <div class="dropdown-content ampmbutton">
             <button class="ampmbutton">AM</button>
             <button class="ampmbutton">PM</button>
           </div>
         </div>
       </div>
-      <h6>ex. 04/20/20 4:20 am</h6>
+      <h6>ex. 04/20/22 4:20 am</h6>
     </div>
     <div id="reminder-date-selection" class="date-selection">
       <h1>Reminder Date</h1>
       <div class="reminder-date">
         <div class="month">
           <h6>Month</h6>
-          <input class="month"type="text">
+          <input id="reminder-month" class="month" placeholder="4" step="1" type="number" min="1" max="12">
         </div>
         <div class="day">
           <h6>Day</h6>
-          <input class="month"type="text">
+          <input id="reminder-day" class="month" placeholder="20" step="1" type="number" min="1" max="31">
         </div>
         <div class="year">
           <h6>Year</h6>
-          <input class="month"type="text">
+          <input id="reminder-year" class="month" type="number" placeholder="2022" min="2022" step="1">
         </div>
         <div class="time">
           <h6>Hour</h6>
-          <input class="month"type="text">
+          <input id="reminder-hour" placeholder="4" step="1" min="1" max="12" class="month" type="number">
         </div>
         <div>
           <h6>Minute</h6>
-          <input class="month"type="text">
+          <input id="reminder-minute" placeholder="20" step="1" min="0" max="59"  class="month" type="number">
         </div>
         <div class="dropdown-menu">
-          <button class="dropdown-menu-button ampm">AM/PM</button>
+          <button id="reminder-ampm" class="dropdown-menu-button ampm">AM/PM</button>
           <div class="dropdown-content ampmbutton">
             <button class="ampmbutton">AM</button>
             <button class="ampmbutton">PM</button>
           </div>
         </div>
       </div>
-      <h6>ex. 04/20/20 4:20 am</h6>
+      <h6>ex. 04/20/22 4:20 am</h6>
       <button id="save-discard" role="button" onclick="saveAssessment()">Save</button>
     </div>
     <div class="save-or-discard">
-      <button class="save" role="button" onclick="saveAssessment()">Save</button>
-      <button class="discard" role="button" onclick="saveAssessment()">Discard</button>
+      <button id="save" class="save" role="button" onclick="saveAssessment()">Save</button>
+      <button id="discard" class="discard" role="button">Discard</button>
     </div>
     <div class="current-display">
       <h6 id="class-name">temp</h6>
@@ -137,6 +139,7 @@
       <h6 id="due-date">temp</h6>
       <h6 id="reminder-date">temp</h6>
     </div>
+  </div>
     <script src="../js/add_assignment.js" defer></script>
 </body>
 </html>

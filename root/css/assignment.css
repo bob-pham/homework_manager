@@ -21,6 +21,12 @@
     place-items: center;
 }
 
+.add-assignment-container h6 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3vh;
+  margin: 0.5vh;
+}
+
 .edit-assessment-input label {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;

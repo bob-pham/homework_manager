@@ -364,6 +364,7 @@ class PriorityQueue {
 let currentAssessment;
 let classes = {};
 let classNames = [];
+const numbersRegex = /^\d+$/;
 
 let selectedClass;
 
@@ -390,27 +391,59 @@ function addClass() {
     }
 }
 
+
+/**
+ * Based on selected classes will add the buttons for different asssessments found in the class
+ */
 function chooseAssessment() {
     let dropdown = document.getElementById('assessment-dropdown');
     let syllabus = selectedClass.getSyllabus();
-
-    console.log(selectedClass);
 
     for (let key in syllabus) {
         let button = document.createElement("button");
         button.type = "button";
         button.textContent = key;
         button.onclick = function() {
-            document.getElementById('due-date-selection').setAttribute('style', 'display: inline');
-            document.getElementById('reminder-date-selection').setAttribute('style', 'display: inline');
+            document.getElementById('due-date-selection').setAttribute('style', 'display: grid');
+            document.getElementById('reminder-date-selection').setAttribute('style', 'display: grid');
             document.getElementById('assessment-name').textContent = "Assessment: " + key + "   : Weight: " + syllabus[key];
-            document.getElementById('assessment-name').setAttribute('style', 'display: inline');
+            document.getElementById('assessment-name').setAttribute('style', 'display: grid');
         }
 
         dropdown.appendChild(button);
     }
-
 }
+
+function insertAssessment() {
+    let assessmentName = document.getElementById("new-ass-name").value;
+    
+    if (assessmentName) {
+        let assessmentWeight = document.getElementById("assessment-weight").value;
+        if (assessmentWeight && numbersRegex.test(assessmentWeight)) {
+            assessmentWeight = parseInt(assessmentWeight);
+            if (assessmentWeight > 100) {
+                alert("Please enter valid assessment weight (too high!)");
+            } else {
+                currentWeight += assessmentWeight;
+                let assessment = new Assessment();
+                assessment.setName(assessmentName);
+                assessment.setWeight(assessmentWeight);
+    
+                selectedClass.addAssessment(assessment);
+    
+                document.getElementById("new-ass-name").value = "";
+                document.getElementById("new-ass-weight").value = "";
+                
+                document.getElementById('create_ass_form').setAttribute('style', 'display: none');
+            }
+        } else {
+            alert("Please enter valid assessment weight (%)")
+        }
+    } else {
+        alert("Please enter assessment name")
+    }
+}
+
 
 function initializeClasses() {
     //currently temporary since no memory
@@ -424,5 +457,98 @@ function initializeClasses() {
     }
 }
 
+function saveChanges() {
+    let dueMonth = document.getElementById('due-month').value;
+    let dueDay = document.getElementById('due-day').value;
+    let dueYear = document.getElementById('due-year').value;
+    let dueHour = document.getElementById('due-hour').value;
+    let dueMinute = document.getElementById('due-minute').value;
+
+    let reminderMonth = document.getElementById('reminder-month').value;
+    let reminderDay = document.getElementById('reminder-day').value;
+    let reminderYear = document.getElementById('reminder-year').value;
+    let reminderHour = document.getElementById('reminder-hour').value;
+    let reminderMinute = document.getElementById('reminder-minute').value;
+
+    let taskName = document.getElementById('task-name').value;
+
+    // Makes sure that all inputs are valid
+    if (!taskName) {
+        alert("Please Enter Task Name");
+    } else if (!testValidDateEntry(dueMonth, 1, 12)) {
+        alert("Invalid Due Date Month");
+    } else if (!testValidDateEntry(dueDay, 1, 31)) {
+        alert("Invalid Due Date Day");
+    } else if (!testValidDateEntry(dueYear, 2022, 3000)) {
+        alert("Invalid Due Date Year");
+    } else if (!testValidDateEntry(dueHour, 1, 12)) {
+        alert("Invalid Due Date Hour");
+    } else if (!testValidDateEntry(dueMinute, 0, 59)) {
+        alert("Invalid Due Date Minute");
+    } else if (!testValidDateEntry(reminderMonth, 1, 12)) {
+        alert("Invalid Reminder Date Month");
+    } else if (!testValidDateEntry(reminderDay, 1, 31)) {
+        alert("Invalid Reminder Date Day");
+    } else if (!testValidDateEntry(reminderYear, 2022, 3000)) {
+        alert("Invalid Reminder Date Year");
+    } else if (!testValidDateEntry(reminderHour, 1, 12)) {
+        alert("Invalid Reminder Date Hour");
+    } else if (!testValidDateEntry(reminderMinute, 0, 59)) {
+        alert("Invalid Reminder Date Minute");
+    } else {
+        dueMonth = parseInt(dueMonth);
+        dueDay = parseInt(dueDay);
+        reminderMonth = parseInt(reminderMonth);
+        reminderDay = parseInt(reminderDay);
+
+        //makes sure that the day is valid given the month
+        if ((dueMonth == 4 || dueMonth == 6 || dueMonth == 9 || dueMonth == 11) && dueDay > 30) {
+            alert("Invalid Due Date Day");
+
+            //I am not going to bother with leap years
+        } else if (dueMonth == 2 && dueDay > 28) {
+            alert("Invalid Due Date Day");
+        } else if ((reminderMonth == 4 || reminderMonth == 6 || reminderMonth == 9 || reminderMonth == 11) && reminderDay > 30) {
+            alert("Invalid Due Date Day");
+        } else if (reminderMonth == 2 && reminderDay > 28) {
+            alert("Invalid Due Date Day");
+        } else {
+            dueYear = parseInt(dueYear);
+            dueHour = parseInt(dueHour);
+            dueMinute = parseInt(dueMinute);
+
+            reminderYear = parseInt(reminderYear);
+            reminderHour = parseInt(reminderHour);
+            reminderMinute = parseInt(reminderMinute);
+
+            let newDueDate = dueAm ? new Date(dueYear, dueMonth, dueDay, dueHour, dueMinute) : new Date(dueYear, dueMonth, dueDay, dueHour + 12, dueMinute);
+            let newReminderDate = reminderAm ? new Date(reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute) : new Date(reminderYear, reminderMonth, reminderDay, reminderHour + 12, reminderMinute); 
+
+            
+        }
+    }
+}
+
+function testValidDateEntry(entry, boundlower, boundupper) {
+    return entry && numbersRegex.test(entry) && parseInt(entry) >= boundlower && parseInt(entry) <= boundupper;
+}
+
+
 initializeClasses();
 addClass();
+
+document.getElementById('add-new-assessment').addEventListener("click", function() {
+    document.getElementById('create_ass_form').setAttribute('style', 'display: block');
+}, false);
+
+document.getElementById('save-new-assessment').addEventListener("click", insertAssessment, false);
+
+document.getElementById('discard-new-assessment').addEventListener("click", function() {
+    document.getElementById("new-ass-name").value = "";
+    document.getElementById("new-ass-weight").value = "";
+    document.getElementById('create_ass_form').setAttribute('style', 'display: none');
+}, false);
+
+document.getElementById('discard').addEventListener("click", function() {
+    location.href = "../index.html";
+}, false);

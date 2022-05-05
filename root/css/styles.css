@@ -17,6 +17,8 @@
     font-family: 'Montserrat';
     margin-left: 0.5vw;
     margin-right: 0.5vw;
+    color: white;
+    border-radius: 1vh;
 }
 
 #header {
@@ -64,4 +66,10 @@
 
 .table-container h4 {
     font-size: 2rem;
+    margin: 1vh;
+}
+
+#completed-message {
+    color: green;
+    display: none;
 }

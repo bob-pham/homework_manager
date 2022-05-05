@@ -96,7 +96,7 @@ class Assessment {
     _accounted_for; //{boolean}, true if the assessment has been accounted for, false otherwise
     _grade; // current overall Assessment grade
     _grades; // array of grades from completed tasks that were from this Assessment 
-    _class; // parent class
+    _class; // parent course, is a string to avoid ciruclar references, gets the class from a global map of classes instead
 
     constructor(name, weight, course) {
         this._name = name;
@@ -146,6 +146,7 @@ class Assessment {
     getClass() {
        return this._class;
     }
+
     /**
      * @param  {double} grade
      * 
@@ -407,7 +408,8 @@ class PriorityQueue {
 } 
 
 let pq;
-let first 
+let first;
+let classes = {};
 const TASKS_TO_SHOW = 5; //only show the 5 Tasks with the most priority
 
 function initialize() {
@@ -445,10 +447,38 @@ function initializeTasks() {
         while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
             let tempTask = tempQueue.dequeue();
             let newRow = table.rows[1].cloneNode(true);
+            let div  = document.createElement('div');
+            let markAsComplete = document.createElement('button');
+            let edit = document.createElement('button');
+
+            markAsComplete.textContent = "Mark Complete";
+            markAsComplete.setAttribute('style', 'background-color: #008ecf')
+
+            markAsComplete.onclick = function() {
+            newRow.setAttribute('style', 'display: none');
+            document.getElementById('completed-message').setAttribute('style', 'display: grid');
+
+            setTimeout(function () {
+                document.getElementById('completed-message').setAttribute('style', 'display: none');
+            }, 2500);
+            }
+
+            edit.textContent = "Edit Task";
+            edit.setAttribute('style', 'background-color:#282b30');
+
+            edit.onclick = function() {
+            sessionStorage.setItem('editTask', JSON.stringify(tempTask));
+            location.href = 'pages/task.html';
+            }
+
+            div.appendChild(markAsComplete);
+            div.appendChild(edit);
+
             newRow.cells[0].innerHTML = tempTask.getClass().getName();
             newRow.cells[1].innerHTML = tempTask.getName();
-            newRow.cells[2].innerHTML = tempTask.getDueDate().toString();
-        
+            newRow.cells[2].innerHTML = tempTask.getFormattedDueDate();
+            newRow.cells[3].appendChild(div);
+    
             table.appendChild(newRow);
 
         }
@@ -465,10 +495,14 @@ function tempInitialize() {
     
     let course = new Course();
     course.setName("Minecraft");
-    
-    let ass = new Assessment("Gaming", 10, course);
+
+    let ass = new Assessment("Gaming", 10, course.getName());
 
     course.addAssessment(ass);
+
+    classes = {
+        "Minecraft": course,
+    }
 
 
     for (let i = 0; i < 10; i++) {
@@ -479,8 +513,6 @@ function tempInitialize() {
 
     tempQueue.setQueue(tempArray);
 
-    console.log(tempArray);
-
     while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
         let tempTask = tempQueue.dequeue();
         let newRow = table.rows[1].cloneNode(true);
@@ -489,7 +521,25 @@ function tempInitialize() {
         let edit = document.createElement('button');
 
         markAsComplete.textContent = "Mark Complete";
+        markAsComplete.setAttribute('style', 'background-color: #008ecf')
+
+        markAsComplete.onclick = function() {
+            newRow.setAttribute('style', 'display: none');
+            document.getElementById('completed-message').setAttribute('style', 'display: grid');
+
+            setTimeout(function () {
+                document.getElementById('completed-message').setAttribute('style', 'display: none');
+            }, 2500);
+        }
+
         edit.textContent = "Edit Task";
+        edit.setAttribute('style', 'background-color:#282b30');
+
+        edit.onclick = function() {
+            sessionStorage.setItem('editTask', JSON.stringify(tempTask));
+            sessionStorage.setItem('classes', JSON.stringify(classes));
+            location.href = 'pages/task.html';
+        }
 
         div.appendChild(markAsComplete);
         div.appendChild(edit);

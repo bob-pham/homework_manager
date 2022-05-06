@@ -384,159 +384,74 @@ class PriorityQueue {
 
 } 
 
-let pq;
-let first;
-let classes = {};
-const TASKS_TO_SHOW = 5; //only show the 5 Tasks with the most priority
 
-function initialize() {
-    pq = new PriorityQueue();
+// Functions that run the page
 
-    chrome.storage.sync.get(['queue'], function(result) {
-        if (result) {
-            pq.setQueue(JSON.parse(result));
-            initializeTasks();
+// Global Variables
+let classes = JSON.parse(sessionStorage.getItem('classes'));
+let pq = new PriorityQueue();
+let temp = JSON.parse(sessionStorage.getItem('priorityqueue'));
+pq.setQueue(temp);
+let selectedClass;
+
+function addClasses() {
+
+    let dropdown = document.getElementById('class-dropdown');
+
+    console.log(classes);
+
+    for (let c in classes) {
+        let button = document.createElement("button");
+        button.type = "button";
+        button.textContent = c;
+        button.onclick = function () {
+            selectedClass = Object.assign(new Course(), classes[c]);
+            loadClassDetails();
         }
-    });
-
-}
-
-function initializeTasks() {
-    let hasNewTask = sessionStorage.getItem('hasNewTask');
-
-    if (hasNewTask) {
-        let tempQueue = new PriorityQueue();
-        let tempArray = [];
-        let count = 0;
-        let table = document.getElementById('upcoming-tasks');
-
-        if (hasNewTask == "true") {
-            let newTask = JSON.parse(sessionStorage.getItem('newTask'));
-            pq.enqueue(newTask);
-        }
-        
-        for (let x in pq.getQueue()) {
-            tempArray.push(x);
-        }
-
-        tempQueue.setQueue(tempArray);
-
-        while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
-            let tempTask = tempQueue.dequeue();
-            let newRow = table.rows[1].cloneNode(true);
-            let div  = document.createElement('div');
-            let markAsComplete = document.createElement('button');
-            let edit = document.createElement('button');
-
-            markAsComplete.textContent = "Mark Complete";
-            markAsComplete.setAttribute('style', 'background-color: #008ecf')
-
-            markAsComplete.onclick = function() {
-            newRow.setAttribute('style', 'display: none');
-            document.getElementById('completed-message').setAttribute('style', 'display: grid');
-
-            setTimeout(function () {
-                document.getElementById('completed-message').setAttribute('style', 'display: none');
-            }, 2500);
-            }
-
-            edit.textContent = "Edit Task";
-            edit.setAttribute('style', 'background-color:#282b30');
-
-            edit.onclick = function() {
-            sessionStorage.setItem('editTask', JSON.stringify(tempTask));
-            location.href = 'pages/task.html';
-            }
-
-            div.appendChild(markAsComplete);
-            div.appendChild(edit);
-
-            newRow.cells[0].innerHTML = tempTask.getClass().getName();
-            newRow.cells[1].innerHTML = tempTask.getName();
-            newRow.cells[2].innerHTML = tempTask.getFormattedDueDate();
-            newRow.cells[3].appendChild(div);
-    
-            table.appendChild(newRow);
-
-        }
-         
-        
+        dropdown.appendChild(button);
     }
 }
 
-function tempInitialize() {
-    let tempQueue = new PriorityQueue();
-    let tempArray = [];
-    let count = 0;
-    let table = document.getElementById('upcoming');
-    
-    let course = new Course();
-    course.setName("Minecraft");
+function loadClassDetails() {
+    let syllabus = selectedClass.getSyllabus();
+    let table = document.getElementById('syllabus-table');
+    let taskTable = document.getElementById('task-table')
 
-    let ass = new Assessment("Gaming", 10, course.getName());
-
-    course.addAssessment(ass);
-
-    classes = {
-        "Minecraft": course,
-    }
-
-
-    for (let i = 0; i < 10; i++) {
-        let tasker = new Task(i, ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5));
-        tasker._priority = i;
-        tasker.addSubtask(new Task("filler", ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5)));
-        tempArray.push(tasker);
-        console.log(tasker);
-    }
-
-    tempQueue.setQueue(tempArray);
-
-    sessionStorage.setItem('priorityqueue', JSON.stringify(tempQueue.getQueue()));
-
-
-    while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
-        let tempTask = tempQueue.dequeue();
+    for (let key in syllabus) {
         let newRow = table.rows[1].cloneNode(true);
-        let div  = document.createElement('div');
-        let markAsComplete = document.createElement('button');
-        let edit = document.createElement('button');
+        syllabus[key] = Object.assign(new Assessment(), syllabus[key]);
 
-        markAsComplete.textContent = "Mark Complete";
-        markAsComplete.setAttribute('style', 'background-color: #008ecf')
+        newRow.cells[0].innerHTML = key;
+        newRow.cells[1].innerHTML = syllabus[key].getWeight();
 
-        markAsComplete.onclick = function() {
-            newRow.setAttribute('style', 'display: none');
-            document.getElementById('completed-message').setAttribute('style', 'display: grid');
-
-            setTimeout(function () {
-                document.getElementById('completed-message').setAttribute('style', 'display: none');
-            }, 2500);
-        }
-
-        edit.textContent = "Edit Task";
-        edit.setAttribute('style', 'background-color:#282b30');
-
-        edit.onclick = function() {
-            sessionStorage.setItem('editTask', JSON.stringify(tempTask));
-            sessionStorage.setItem('classes', JSON.stringify(classes));
-            location.href = 'pages/task.html';
-        }
-
-        div.appendChild(markAsComplete);
-        div.appendChild(edit);
-
-        newRow.cells[0].innerHTML = tempTask.getAssessment().getClass();
-        newRow.cells[1].innerHTML = tempTask.getName();
-        newRow.cells[2].innerHTML = tempTask.getFormattedDueDate();
-        newRow.cells[3].appendChild(div);
-    
         table.appendChild(newRow);
     }
 
+    while (!pq.isEmpty()) {
+        let newRow = taskTable.rows[1].cloneNode(true);
+        let node = pq.dequeue();
+        node = Object.assign(new Task(), node);
+        node.setDueDate(new Date(node.getDueDate()));
+
+        newRow.cells[0].innerHTML = node.getName();
+        newRow.cells[1].innerHTML = node.getFormattedDueDate();
+
+        console.log("fuck");
+        taskTable.appendChild(newRow);
+    }
+
+    document.getElementById('class-details').setAttribute('style', 'display:grid');
+}
+
+function initialize() {
+    chrome.storage.sync.get()
 }
 
 
-// initialize();
+function tempInitialize() {
+    addClasses();
+}
 
 tempInitialize();
+// initialize();
+

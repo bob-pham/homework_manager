@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat&display=swap');
+
+
+.container {
+    display: grid;
+    place-items: center;
+}
+
+#class-details h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3vh;
+    margin: 1vh;
+}
+
+#class-details {
+    display: none;
+    place-items: center;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#class-details td {
+    font-family: 'Montserrat', sans-serif;
+    width: 20vw;
+}
+
+#class-details table {
+    width: 40vw;
+    border-color: black;
+    border-style: solid;
+
+    margin: 2vh;
+}
+
+.add-assessment-form {
+    display: none;
+}
+
+.buttons {
+    display: grid;
+    place-items: center;
+}
+
+.buttons button {
+    width: 10vw;
+    margin: 1vh;
+    color: white;
+    background-color: var(--dark-button);
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+}

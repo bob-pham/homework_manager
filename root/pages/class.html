@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/class.css">
+    <link rel="stylesheet" href="../css/view_class.css">
     <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -27,6 +27,16 @@
          Class Name
         </h6>
     </div>
+    <div class="container">
+        <div id="class-selector" class="dropdown-menu">
+            <button class="dropdown-menu-button">
+              Class
+            </button>
+            <div id="class-dropdown" class="dropdown-content">
+              <a href="add_class.html">Add New Class</a>
+            </div>
+          </div>
+    </div>
     <div class="add-assessment-form">
         <label for="">Assessment Name</label>
         <input type="text">
@@ -34,51 +44,41 @@
         <input type="text">
         <button>Add</button>
     </div>
-    <div class="syllabus">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Weight</th>
-                </tr>
-            </thead>
-            <tbody>
-                <td id="name"></td>
-                <td id="weight"></td>
-            </tbody>
-        </table>
+    <div id="class-details">
+        <h6>Syllabus:</h6>
+        <div class="syllabus">
+            <table id="syllabus-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td id="name"></td>
+                    <td id="weight"></td>
+                </tbody>
+            </table>
+        </div>
+        <div id="upcoming-tasks">
+            <table id="task-table">
+                <thead>
+                    <tr>
+                        <th>Upcoming Tasks</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td id="Name"></td>
+                    <td id="Date"></td>
+                </tbody>
+            </table>
+        </div>
+        <div class="buttons">
+            <button>Add Assessment</button>
+            <button> Exit </button>
+        </div>
     </div>
-    <div class="upcoming-tasks" id="upcoming-tasks">
-        <table>
-            <thead>
-                <tr>
-                    <th>Upcoming Task</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <td id="Name"></td>
-                <td id="Date"></td>
-            </tbody>
-        </table>
-    </div>
-    <div class="recently-deleted" id="recently-deleted">
-        <table>
-            <thead>
-                <tr>
-                    <th>Recently Deleted</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <td id="name"></td>
-            </tbody>
-        </table>
-    </div>
-    <div class="buttons">
-        <button>Edit</button>
-        <button>Recently Deleted</button>
-        <button> Exit </button>
-    </div>
+    <script src="../js/class.js" defer></script>
 </body>
 </html>

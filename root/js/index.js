@@ -39,7 +39,7 @@ class Course {
         this._syllabus[assessment.getName()] = assessment;
     }
 
-    getAssesssment(assessmentName) {
+    getAssessment(assessmentName) {
         return this._syllabus[assessmentName];
     }
 
@@ -171,7 +171,6 @@ class Task {
     _grade; // current task grade
     _assessment; // assessment that the task belongs to
     _completed; // true if the assessment has been completed
-    _parentTask; // parent task
     _subtasks; // array that contains a list of subtasks
     _reminderDate; // the date of the reminder
     _dueDate; // the due date of the reminder
@@ -184,7 +183,6 @@ class Task {
         this._assessment = assessment;
         this._completed = false;
         this._grade = 100;
-        this._parentTask = null;
         this._subtasks = [];
         this._forMarks = forMarks;
         this._dueDate = dueDate;
@@ -211,10 +209,6 @@ class Task {
         this._subtasks = subtasks;
     }
 
-    setParent(parent) {
-        this._parentTask = parent;
-    }
-
     setDueDate(date) {
         this._dueDate = date;
     }
@@ -231,16 +225,12 @@ class Task {
         return this._grade;     
     }
 
-    getAssesssment(){
+    getAssessment(){
         return this._assessment;
     }
 
     getSubtasks(){
         return this._subtasks;   
-    }
-
-    getParent(){
-        return this._parentTask;     
     }
 
     getPriority() {
@@ -257,6 +247,10 @@ class Task {
 
     getFormattedDueDate() {
         return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
+    }
+
+    getFormattedReminderDate() {
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + 1 + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -276,9 +270,6 @@ class Task {
     }
 
     addGrade(grade) {
-        if (this._parentTask) {
-            this._parentTask.addChildGrade(grade);
-        }
         this._grade = grade;
     }
 
@@ -286,12 +277,7 @@ class Task {
         this._grade += grade / this._subtasks.length;
     }
 
-    setParent(parent) {
-        this._parentTask = parent;
-    }
-
     addSubtask(subtask) {
-        subtasks.setParent(this);
         this._subtasks.push(subtask);
     }
 
@@ -499,7 +485,9 @@ function tempInitialize() {
     for (let i = 0; i < 10; i++) {
         let tasker = new Task(i, ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5));
         tasker._priority = i;
+        tasker.addSubtask(new Task("filler", ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5)));
         tempArray.push(tasker);
+        console.log(tasker);
     }
 
     tempQueue.setQueue(tempArray);

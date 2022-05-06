@@ -296,6 +296,7 @@ let task = Object.assign(new Task(), JSON.parse(sessionStorage.getItem('editTask
 task.setDueDate(new Date(task.getDueDate()));
 task.setReminderDate(new Date(task.getReminderDate()));
 let classes = JSON.parse(sessionStorage.getItem('classes'));
+let selectedClass;
 
 function initializeGUI() {
     document.getElementById('subheading').textContent = "Task Name: " + task.getName();
@@ -314,12 +315,16 @@ function initializeGUI() {
     document.getElementById('reminder-year').placeholder = task.getReminderDate().getFullYear();
     document.getElementById('reminder-hour').placeholder = task.getReminderDate().getHours();
     document.getElementById('reminder-minute').placeholder = task.getReminderDate().getMinutes();
+
+    addClasses();
+    initializeSubtasks();
 }
 
 function initializeSubtasks() {
     let table = document.getElementById('subtasks');
 
     for (let subtask in task.getSubtasks()) {
+        console.log(subtask);
         subtask = Object.assign(new Task(), subtask);
 
         let newRow = table.rows[1].cloneNode(true);
@@ -342,14 +347,13 @@ function initializeSubtasks() {
     
     
         newRow.cells[0].innerHTML = subtask.getName();
+        console.log(subtask);
         newRow.cells[1].appendChild(div);
         table.appendChild(newRow);
 
         document.getElementById('subtask-container').setAttribute('style', 'display: grid');
         document.getElementById('no-subtasks').setAttribute('style', 'display: none');
     }
-
-
 }
 
 function addSubtask(name) {
@@ -373,11 +377,124 @@ function addSubtask(name) {
 
     div.appendChild(markAsComplete);
 
-
     newRow.cells[0].innerHTML = name;
     newRow.cells[1].appendChild(div);
     table.appendChild(newRow);
     task.addSubtask(newSubTask);
+}
+
+function addClasses() {
+
+    let dropdown = document.getElementById('class-dropdown');
+
+    for (let c in classes) {
+        let button = document.createElement("button");
+        button.type = "button";
+        button.textContent = c;
+        button.onclick = function () {
+            selectedClass = Object.assign(new Course(), classes[c]);
+            addAssessments();
+        }
+        dropdown.appendChild(button);
+    }
+}
+
+function addAssessments() {
+    let dropdown = document.getElementById('assessment-dropdown');
+    const syll = selectedClass.getSyllabus();
+    
+    for (let c in syll) {
+        let button = document.createElement("button");
+        button.type = "button";
+        button.textContent = c;
+        button.onclick = function () {
+            selectedClass = classes[c];
+            task.setAssessment = syll[c];
+        }
+        dropdown.appendChild(button);
+    }
+}
+
+
+function saveChanges() {
+    let dueMonth = document.getElementById('due-month').value;
+    let dueDay = document.getElementById('due-day').value;
+    let dueYear = document.getElementById('due-year').value;
+    let dueHour = document.getElementById('due-hour').value;
+    let dueMinute = document.getElementById('due-minute').value;
+
+    let reminderMonth = document.getElementById('reminder-month').value;
+    let reminderDay = document.getElementById('reminder-day').value;
+    let reminderYear = document.getElementById('reminder-year').value;
+    let reminderHour = document.getElementById('reminder-hour').value;
+    let reminderMinute = document.getElementById('reminder-minute').value;
+
+    let taskName = document.getElementById('task-name').value;
+
+    // Makes sure that all inputs are valid
+    if (!testValidDateEntry(dueMonth, 1, 12)) {
+        alert("Invalid Due Date Month");
+    } else if (!testValidDateEntry(dueDay, 1, 31)) {
+        alert("Invalid Due Date Day");
+    } else if (!testValidDateEntry(dueYear, 2022, 3000)) {
+        alert("Invalid Due Date Year");
+    } else if (!testValidDateEntry(dueHour, 1, 12)) {
+        alert("Invalid Due Date Hour");
+    } else if (!testValidDateEntry(dueMinute, 0, 59)) {
+        alert("Invalid Due Date Minute");
+    } else if (!testValidDateEntry(reminderMonth, 1, 12)) {
+        alert("Invalid Reminder Date Month");
+    } else if (!testValidDateEntry(reminderDay, 1, 31)) {
+        alert("Invalid Reminder Date Day");
+    } else if (!testValidDateEntry(reminderYear, 2022, 3000)) {
+        alert("Invalid Reminder Date Year");
+    } else if (!testValidDateEntry(reminderHour, 1, 12)) {
+        alert("Invalid Reminder Date Hour");
+    } else if (!testValidDateEntry(reminderMinute, 0, 59)) {
+        alert("Invalid Reminder Date Minute");
+    } else {
+        dueMonth = parseInt(dueMonth);
+        dueDay = parseInt(dueDay);
+        reminderMonth = parseInt(reminderMonth);
+        reminderDay = parseInt(reminderDay);
+
+        //makes sure that the day is valid given the month
+        if ((dueMonth == 4 || dueMonth == 6 || dueMonth == 9 || dueMonth == 11) && dueDay > 30) {
+            alert("Invalid Due Date Day");
+
+            //I am not going to bother with leap years
+        } else if (dueMonth == 2 && dueDay > 28) {
+            alert("Invalid Due Date Day");
+        } else if ((reminderMonth == 4 || reminderMonth == 6 || reminderMonth == 9 || reminderMonth == 11) && reminderDay > 30) {
+            alert("Invalid Due Date Day");
+        } else if (reminderMonth == 2 && reminderDay > 28) {
+            alert("Invalid Due Date Day");
+        } else {
+            dueYear = parseInt(dueYear);
+            dueHour = parseInt(dueHour);
+            dueMinute = parseInt(dueMinute);
+
+            reminderYear = parseInt(reminderYear);
+            reminderHour = parseInt(reminderHour);
+            reminderMinute = parseInt(reminderMinute);
+
+            let newDueDate = dueAm ? new Date(dueYear, dueMonth, dueDay, dueHour, dueMinute) : new Date(dueYear, dueMonth, dueDay, dueHour + 12, dueMinute);
+            let newReminderDate = reminderAm ? new Date(reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute) : new Date(reminderYear, reminderMonth, reminderDay, reminderHour + 12, reminderMinute); 
+            
+            task.setDueDate(newDueDate);
+            task.setReminderDate(newReminderDate);
+            
+            if (taskName) {
+                task.setName(taskName);
+            }
+
+            makeTask.calculatePriority();
+
+            sessionStorage.setItem('updatedTask', JSON.stringify(makeTask));
+            sessionStorage.setItem('updatedTasks', true);
+            location.href = "../index.html";
+        }
+    }
 }
 
 document.getElementById('adder').addEventListener("click", function() {
@@ -395,6 +512,11 @@ document.getElementById('adder').addEventListener("click", function() {
 
 document.getElementById('add-subtask').addEventListener("click", function() {
     document.getElementById('subtask-fields').setAttribute('style', 'display: grid');
+}, false);
+
+document.getElementById('discard').addEventListener("click", function() {
+    sessionStorage.setItem('updatedTasks', false);
+    location.href = "../index.html";
 }, false);
 
 initializeGUI();

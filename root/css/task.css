@@ -18,7 +18,14 @@
 }
 
 .tasks-table {
-    width: 80vw;
+    width: 50vw;
+    text-align: center;
+}
+
+#subtasks button {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    border-radius: 1vh;
 }
 
 .tasks-table th {
@@ -67,3 +74,4 @@
     width: 10vw;
     margin: 2vh;
 }
+

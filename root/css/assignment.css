@@ -3,6 +3,11 @@
   --important-button-blue: #008ecf;
 }
 
+body {
+  width: 600px;
+  height: 600px;
+}
+
 #subheading {
   font-family: Montserrat;
 }

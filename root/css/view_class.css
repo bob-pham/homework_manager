@@ -12,6 +12,10 @@
     margin: 1vh;
 }
 
+#subheading {
+    display: none;
+}
+
 #class-details {
     display: none;
     place-items: center;
@@ -42,10 +46,32 @@
 }
 
 .buttons button {
-    width: 10vw;
+    width: 30vw;
+    font-size: 1.5rem !important;
     margin: 1vh;
     color: white;
     background-color: var(--dark-button);
     font-size: 1rem;
     font-family: 'Montserrat', sans-serif;
 }
+
+.edit-assessment-input label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+  }
+  
+  .edit-assessment-input  {
+    display: none;
+    place-items: center;
+  }
+  
+  .edit-assessment-input button {
+    color: white;
+    background-color: #008ecf;
+    width: 30vw;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    margin: 0.5vh;
+    cursor: pointer;
+    text-align: center;
+  }

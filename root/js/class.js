@@ -292,107 +292,14 @@ class Task {
     }
 }
 
-class PriorityQueue {
-    _values;
-
-    constructor() {
-        this._values = [];
-    }
-
-    setQueue(queue) {
-        this._values = queue;
-    }
-
-    getQueue() {
-        return this._values;
-    }
-
-
- dequeue() {
-    // store the root node to return at end
-    const min = this._values[0];
-    // pop the last node in array and set as the new head
-    const end = this._values.pop();
-    if(this._values.length > 0) {
-      this._values[0] = end;
-      
-      // store variables we will use to check
-      let index = 0;
-      const length = this._values.length;
-      const element = this._values[0];
-      
-      while(true) {
-        let leftIndex = 2 * index + 1;
-        let rightIndex = 2 * index + 2;
-        let leftChild, rightChild;
-        let swap = null;
-
-        // check if there is a left child
-        if(leftIndex < length) {
-          leftChild = this._values[leftIndex];
-          // compare the priority level of the left child
-          if(leftChild.getPriority() < element.getPriority()) {
-            swap = leftIndex;
-          }
-        }
-        
-        // check if there is a right child
-        if(rightIndex < length) {
-          rightChild = this._values[rightIndex];
-          // compare the priority level of the right child
-          if((swap === null && rightChild.getPriority() < element.getPriority()) || (swap !== null && rightChild.getPriority() < leftChild.getPriority())) {
-            swap = rightIndex;
-          }
-        }
-        
-        // if no swaps were done, we will break out of the while loop
-        if(swap === null) break;
-        this._values[index] = this._values[swap];
-        this._values[swap] = element;
-        index = swap;
-      }
-    }
-    return min;
-  }
-  
-   enqueue(node) {
-    // push the new node into the values array
-    this._values.push(node);
-
-    // store the index and the node of the new node
-    let index = this._values.length - 1;
-    const element = this._values[index];
-    
-    // initialize a while loop to run while inserted node is not at the root
-    while(index > 0) {
-      // store the index and node of the parent
-      let parentIndex = Math.floor((index - 1) / 2);
-      const parent = this._values[parentIndex];
-      
-      // compare the priority of the inserted and parent
-      if(element.getPriority() >= parent.getPriority()) break;
-      this._values[parentIndex] = element;
-      this._values[index] = parent;
-      index = parentIndex;
-    }
-    return this._values;
-  }
-
-  isEmpty() {
-      return this._values.length == 0;
-  }
-
-} 
-
 
 // Functions that run the page
 
 // Global Variables
 let classes = JSON.parse(sessionStorage.getItem('classes'));
-let pq = new PriorityQueue();
-let temp = JSON.parse(sessionStorage.getItem('priorityqueue'));
-pq.setQueue(temp);
+let queue = JSON.parse(sessionStorage.getItem('priorityqueue'));
 let selectedClass;
+let currentWeight = 0;
 
 function addClasses() {
 
@@ -405,6 +312,9 @@ function addClasses() {
         button.type = "button";
         button.textContent = c;
         button.onclick = function () {
+            const sheading = document.getElementById('subheading');
+            sheading.textContent = "Class: " + c;
+            sheading.setAttribute('style', 'display: grid; color: green');
             selectedClass = Object.assign(new Course(), classes[c]);
             loadClassDetails();
         }
@@ -423,25 +333,78 @@ function loadClassDetails() {
 
         newRow.cells[0].innerHTML = key;
         newRow.cells[1].innerHTML = syllabus[key].getWeight();
+        currentWeight += syllabus[key].getWeight();
 
         table.appendChild(newRow);
     }
 
-    while (!pq.isEmpty()) {
+    for (let i = 0; i < queue.length; i++) {
         let newRow = taskTable.rows[1].cloneNode(true);
-        let node = pq.dequeue();
-        node = Object.assign(new Task(), node);
-        node.setDueDate(new Date(node.getDueDate()));
+        let item = Object.assign(new Task(), queue[i]);
+        item.setDueDate(new Date(item.getDueDate()));
 
-        newRow.cells[0].innerHTML = node.getName();
-        newRow.cells[1].innerHTML = node.getFormattedDueDate();
+        console.log(item);
 
-        console.log("fuck");
+        newRow.cells[0].innerHTML = item.getName();
+        newRow.cells[1].innerHTML = item.getFormattedDueDate();
+
         taskTable.appendChild(newRow);
     }
 
     document.getElementById('class-details').setAttribute('style', 'display:grid');
 }
+
+function saveNewAssessment() {
+    let assessmentName = document.getElementById("new-ass-name").value;
+    const numbersRegex = /^\d+$/;
+
+    if (assessmentName) {
+        let assessmentWeight = document.getElementById("new-ass-weight").value;
+        if (assessmentWeight && numbersRegex.test(assessmentWeight)) {
+            assessmentWeight = parseInt(assessmentWeight);
+            if (assessmentWeight + currentWeight > 100) {
+                alert("Please enter valid assessment weight (too high!)");
+            } else {
+                let assessment = new Assessment();
+                assessment.setName(assessmentName);
+                assessment.setWeight(assessmentWeight);
+
+                selectedClass.addAssessment(assessment);
+                currentWeight += assessmentWeight;
+
+                document.getElementById("new-ass-name").value = "";
+                document.getElementById("new-ass-weight").value = "";
+
+                let table = document.getElementById('syllabus-table');
+                let newRow = table.rows[1].cloneNode(true);
+        
+                newRow.cells[0].innerHTML = assessmentName;
+                newRow.cells[1].innerHTML = assessmentWeight;
+        
+                table.appendChild(newRow);
+
+                document.getElementById('edit-assessment-container').setAttribute('style', 'display: none');
+            }
+        } else {
+            alert("Please enter valid assessment weight (%)")
+        }
+    } else {
+        alert("Please enter assessment name")
+    }
+
+}
+
+
+function saveAndExit() {
+
+    // chrome.storage.sync.set({classes : JSON.stringify(classes)}, function() {
+    //     location.href = "../index";
+    // });
+
+    location.href = "../index.html";
+
+}
+
 
 function initialize() {
     chrome.storage.sync.get()
@@ -451,6 +414,19 @@ function initialize() {
 function tempInitialize() {
     addClasses();
 }
+
+document.getElementById('add-assessment').addEventListener("click", function() {
+    document.getElementById('edit-assessment-container').setAttribute('style', 'display: grid');
+}, false);
+
+document.getElementById('save-new-assessment').addEventListener("click", saveNewAssessment, false);
+document.getElementById('discard-new-assessment').addEventListener("click", function() {
+    document.getElementById("new-ass-name").value = "";
+    document.getElementById("new-ass-weight").value = "";
+    document.getElementById('edit-assessment-container').setAttribute('style', 'display: none');
+}, false);
+
+document.getElementById('exit').addEventListener("click", saveAndExit, false);
 
 tempInitialize();
 // initialize();

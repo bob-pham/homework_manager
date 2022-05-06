@@ -61,10 +61,11 @@
             </table>
         </div>
         <div id="upcoming-tasks">
+            <h6>Upcoming Tasks:</h6>
             <table id="task-table">
                 <thead>
                     <tr>
-                        <th>Upcoming Tasks</th>
+                        <th>Name</th>
                         <th>Date</th>
                     </tr>
                 </thead>
@@ -74,10 +75,24 @@
                 </tbody>
             </table>
         </div>
+        <div id="edit-assessment-container" class="edit-assessment-input">
+            <div>
+              <label for="name" class="sr-only">Assessment Name:</label>
+              <input type="text" class="form-control" id="new-ass-name">
+            </div>
+            <div>
+              <label for="name">Assessment Weight:</label>
+              <input type="number" min="0" max="100" step="1" class="form-control" id="new-ass-weight">
+            </div>
+            <button id="save-new-assessment" role="button">Save Assessment</button>
+            <button id="discard-new-assessment" role="button">Discard Assessment</button>
+          </div>
         <div class="buttons">
-            <button>Add Assessment</button>
-            <button> Exit </button>
+            <button id="add-assessment">Add Assessment</button>
         </div>
+    </div>
+    <div class="buttons">
+        <button id="exit"> Exit </button>
     </div>
     <script src="../js/class.js" defer></script>
 </body>

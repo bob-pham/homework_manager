@@ -196,7 +196,6 @@ function setAssignment() {
     let assessmentWeight = document.getElementById("assessment-weight").value;
 
     if (assessmentName) {
-        console.log(currentWeight);
         if (assessmentWeight && numbersRegex.test(assessmentWeight)) {
             assessmentWeight = parseInt(assessmentWeight);
             if (assessmentWeight > 100) {
@@ -236,11 +235,15 @@ function addRow(name, weight) {
 
 function saveChanges() {
     document.getElementById('saving').setAttribute('style', 'display:inline');
-    chrome.storage.sync.set({"classes" : JSON.stringify(classes)}, function() {
 
-    });
-    
-    location.href = "../index.html";
+    // for web extension
+    // chrome.storage.sync.set({"classes" : JSON.stringify(classes)}, function() {
+
+    // });
+
+    classes[newClass.getName()] = newClass;
+    localStorage.setItem("classes", JSON.stringify(classes));
+    return JSON.parse(localStorage.getItem("classes"));
 }
 
 function discardClass() {
@@ -253,11 +256,39 @@ function discardClass() {
     location.href = "../index.html";
 }
 
+function tempInitializeClasses() {
+    classes = localStorage.getItem("classes");
+
+    if (classes) {
+        classes = JSON.parse(classes);
+
+        //reinitializes the course as a course object
+        for (let key in classes) {
+            classes[key] = Object.assign(new Course(), classes[key]);
+            let syllabus = classes[key].getSyllabus();
+
+            //makes nested Assessment objects in syllabus Assessment objects 
+            for (let a in syllabus) {
+                syllabus[a] = Object.assign(new Assessment(), syllabus[a]);
+            }
+        }
+    } else {
+        classes = {};
+    }
+}
+
 document.getElementById("save-class-name").addEventListener("click", saveClassName, false);
 document.getElementById("add-assessment").addEventListener("click", setAssignment, false);
 document.getElementById("discard-changes").addEventListener("click", discardClass, false);
 
+document.getElementById("save-changes").addEventListener("click", function() {
+    saveChanges();
+    location.href = "../index.html";
+}, false);
 
-chrome.storage.sync.get(["classes"], function(result) {
-    classes = JSON.parse(result);
-});
+tempInitializeClasses();
+
+
+// chrome.storage.sync.get(["classes"], function(result) {
+//     classes = JSON.parse(result);
+// });

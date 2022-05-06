@@ -384,10 +384,15 @@ class PriorityQueue {
 
 } 
 
+//End of Classes
+
+// Global Variables
 let pq;
-let first;
-let classes = {};
+let classes;
 const TASKS_TO_SHOW = 5; //only show the 5 Tasks with the most priority
+
+
+//Code that runs everything
 
 function initialize() {
     pq = new PriorityQueue();
@@ -458,44 +463,85 @@ function initializeTasks() {
     
             table.appendChild(newRow);
 
-        }
-         
-        
+        }         
     }
 }
 
+/**
+ * Loads all the classes, reinitializes them as class objects, if there are none then classes is an empty map
+ */
+function tempInitializeClasses() {
+    classes = localStorage.getItem("classes");
+    
+    
+    if (classes) {
+        classes = JSON.parse(classes);
+        
+        //reinitializes the course as a course object
+        for (let key in classes) {
+            classes[key] = Object.assign(new Course(), classes[key]);
+            let syllabus = classes[key].getSyllabus();
+
+            //makes nested Assessment objects in syllabus Assessment objects 
+            for (let a in syllabus) {
+                syllabus[a] = Object.assign(new Assessment(), syllabus[a]);
+            }
+        }
+    } else {
+        classes = {};
+    }
+}
+
+
+/**
+ * Loads all saved tasks, reinitializes them as task objects, if there are none then priority queue is empty
+ */
+function tempInitializeTasks() {
+    let tempArray = localStorage.getItem('queue');
+    let sesh = sessionStorage.getItem('hasNewTask')
+    pq = new PriorityQueue();
+
+    if (tempArray) {
+        tempArray = JSON.parse(tempArray);
+
+        // reinitialize all as a Task object
+        for (let i = 0; i < tempArray.length; i++) {
+            tempArray[i] = Object.assign(new Task(), tempArray[i]);
+        }
+
+        pq.setQueue(tempArray);
+    }
+
+    //checks if a new task was added, if it was then add it to the priority queue.
+    if (sesh && sesh == "true") {
+        let newTask = Object.assign(new Task(), JSON.parse(sessionStorage.getItem("newTask")));
+        pq.enqueue(newTask);
+    }
+
+}
+
+
 function tempInitialize() {
+    tempInitializeClasses();
+    tempInitializeTasks();
+
+    let table = document.getElementById('upcoming');
+    let count = 0;
     let tempQueue = new PriorityQueue();
     let tempArray = [];
-    let count = 0;
-    let table = document.getElementById('upcoming');
+    const priorityArray = pq.getQueue();
+
+    //create copy of array (needs to be a separate object)
+    for (let i = 0; i < priorityArray.length; i++) {
+        tempArray[i] = priorityArray[i];
+    }
     
-    let course = new Course();
-    course.setName("Minecraft");
-
-    let ass = new Assessment("Gaming", 10, course.getName());
-
-    course.addAssessment(ass);
-
-    classes = {
-        "Minecraft": course,
-    }
-
-
-    for (let i = 0; i < 10; i++) {
-        let tasker = new Task(i, ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5));
-        tasker._priority = i;
-        tasker.addSubtask(new Task("filler", ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5)));
-        tempArray.push(tasker);
-        console.log(tasker);
-    }
-
+    //we will use this queue to get the top 5 Priority items.
     tempQueue.setQueue(tempArray);
 
-    sessionStorage.setItem('priorityqueue', JSON.stringify(tempQueue.getQueue()));
-
-
     while (!tempQueue.isEmpty() && count < TASKS_TO_SHOW) {
+        count++;
+
         let tempTask = tempQueue.dequeue();
         let newRow = table.rows[1].cloneNode(true);
         let div  = document.createElement('div');

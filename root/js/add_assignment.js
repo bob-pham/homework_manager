@@ -39,7 +39,7 @@ class Course {
         this._syllabus[assessment.getName()] = assessment;
     }
 
-    getAssesssment(assessmentName) {
+    getAssessment(assessmentName) {
         return this._syllabus[assessmentName];
     }
 
@@ -96,7 +96,7 @@ class Assessment {
     _accounted_for; //{boolean}, true if the assessment has been accounted for, false otherwise
     _grade; // current overall Assessment grade
     _grades; // array of grades from completed tasks that were from this Assessment 
-    _class; // parent class
+    _class; // parent course, is a string to avoid ciruclar references, gets the class from a global map of classes instead
 
     constructor(name, weight, course) {
         this._name = name;
@@ -146,6 +146,7 @@ class Assessment {
     getClass() {
        return this._class;
     }
+
     /**
      * @param  {double} grade
      * 
@@ -170,7 +171,6 @@ class Task {
     _grade; // current task grade
     _assessment; // assessment that the task belongs to
     _completed; // true if the assessment has been completed
-    _parentTask; // parent task
     _subtasks; // array that contains a list of subtasks
     _reminderDate; // the date of the reminder
     _dueDate; // the due date of the reminder
@@ -178,13 +178,11 @@ class Task {
     _priority; // the priority value of the task
 
 
-    constructor(name, course, assessment, forMarks, dueDate, reminderDate) {
+    constructor(name, assessment, forMarks, dueDate, reminderDate) {
         this._name = name;
-        this._class = course;
         this._assessment = assessment;
         this._completed = false;
         this._grade = 100;
-        this._parentTask = null;
         this._subtasks = [];
         this._forMarks = forMarks;
         this._dueDate = dueDate;
@@ -199,10 +197,6 @@ class Task {
         this._grade = grade;
     }
 
-    setClass(course){
-        this._class = course;
-    }
-
     setAssessment(assessment){
         this._assessment = assessment;
     }
@@ -215,8 +209,12 @@ class Task {
         this._subtasks = subtasks;
     }
 
-    setParent(parent) {
-        this._parentTask = parent;
+    setDueDate(date) {
+        this._dueDate = date;
+    }
+
+    setReminderDate(date) {
+        this._reminderDate = date;
     }
 
     getName(){
@@ -227,11 +225,7 @@ class Task {
         return this._grade;     
     }
 
-    getClass(){
-        return this._class;     
-    }
-
-    getAssesssment(){
+    getAssessment(){
         return this._assessment;
     }
 
@@ -239,12 +233,24 @@ class Task {
         return this._subtasks;   
     }
 
-    getParent(){
-        return this._parentTask;     
-    }
-
     getPriority() {
         return this._priority;
+    }
+
+    getDueDate() {
+        return this._dueDate;
+    }
+
+    getReminderDate() {
+        return this._reminderDate;
+    }
+
+    getFormattedDueDate() {
+        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
+    }
+
+    getFormattedReminderDate() {
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + 1 + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -264,9 +270,6 @@ class Task {
     }
 
     addGrade(grade) {
-        if (this._parentTask) {
-            this._parentTask.addChildGrade(grade);
-        }
         this._grade = grade;
     }
 
@@ -274,12 +277,7 @@ class Task {
         this._grade += grade / this._subtasks.length;
     }
 
-    setParent(parent) {
-        this._parentTask = parent;
-    }
-
     addSubtask(subtask) {
-        subtasks.setParent(this);
         this._subtasks.push(subtask);
     }
 
@@ -295,8 +293,7 @@ class Task {
 }
  
 
-let currentAssessment;
-let classes = {};
+let classes;
 let classNames = [];
 let currentDate = new Date();
 const numbersRegex = /^\d+$/;
@@ -449,7 +446,7 @@ function saveChanges() {
 
             let newDueDate = dueAm ? new Date(dueYear, dueMonth, dueDay, dueHour, dueMinute) : new Date(dueYear, dueMonth, dueDay, dueHour + 12, dueMinute);
             let newReminderDate = reminderAm ? new Date(reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute) : new Date(reminderYear, reminderMonth, reminderDay, reminderHour + 12, reminderMinute); 
-            let makeTask = new Task(taskName, selectedClass, selectedAssessment, false, newDueDate, newReminderDate);
+            let makeTask = new Task(taskName, selectedAssessment, false, newDueDate, newReminderDate);
             
             makeTask.calculatePriority();
 
@@ -466,44 +463,59 @@ function testValidDateEntry(entry, boundlower, boundupper) {
 
 function initializeClasses() {
     //currently temporary since no memory
-    for (let i = 0; i < temp.length; i++) {
-        let item = new Course();
-        item.setName(temp[i]);
-        let tempMap = {ahhh: "ahhhh"};
-        item._syllabus = tempMap;
-        classes[temp[i]] = item;
-        classNames.push(temp[i]); 
+
+    let temp = localStorage.getItem("classes");
+
+    if (temp != null) {
+        classes = JSON.parse(temp);
+
+        //reinitializes the course as a course object
+        for (let key in classes) {
+            classNames.push(key);
+            classes[key] = Object.assign(new Course(), classes[key]);
+            let syllabus = classes[key].getSyllabus();
+
+            //makes nested Assessment objects in syllabus Assessment objects 
+            for (let a in syllabus) {
+                syllabus[a] = Object.assign(new Assessment(), syllabus[a]);
+            }
+        }
+
+
+    } else {
+        classes = {};
     }
+
     addClass();
     document.getElementById('loading-class').setAttribute('style', 'display: none');
     document.getElementById('class-selector').setAttribute('style', 'display:grid'); 
 }
 
-function initialize() {
-    chrome.storage.sync.get(['classes'], function(result) {
-        classes = JSON.parse(result);
+// function initialize() {
+//     chrome.storage.sync.get(['classes'], function(result) {
+//         classes = JSON.parse(result);
 
-        let dropdown = document.getElementById('class-dropdown');
+//         let dropdown = document.getElementById('class-dropdown');
 
-        for (let course in classes) {
-            let button = document.createElement("button");
-            let name = course.getName();
-            button.type = "button";
-            button.textContent = name;
+//         for (let course in classes) {
+//             let button = document.createElement("button");
+//             let name = course.getName();
+//             button.type = "button";
+//             button.textContent = name;
 
-            button.onclick = function() {
-                selectedClass = classes[name];
-                document.getElementById('assessments').setAttribute('style', 'display: inline');
-                document.getElementById('class-name').textContent = "Class: " + name;
-                document.getElementById('class-name').setAttribute('style', 'display: inline');
-                chooseAssessment();
-            }
-            dropdown.appendChild(button);
-        }
+//             button.onclick = function() {
+//                 selectedClass = classes[name];
+//                 document.getElementById('assessments').setAttribute('style', 'display: inline');
+//                 document.getElementById('class-name').textContent = "Class: " + name;
+//                 document.getElementById('class-name').setAttribute('style', 'display: inline');
+//                 chooseAssessment();
+//             }
+//             dropdown.appendChild(button);
+//         }
 
-        document.getElementById('loading-class').setAttribute('style', 'display: none');
-    });
-}
+//         document.getElementById('loading-class').setAttribute('style', 'display: none');
+//     });
+// }
 
 
 initializeClasses();

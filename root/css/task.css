@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat&display=swap');
+
+
 .subtasks {
     display: none;
     place-items: center;
@@ -24,3 +27,43 @@
     border-color: black;
 } 
 
+.assessment-container {
+    display: grid !important;
+}
+
+.date-selection {
+    display: grid !important;
+}
+
+.subtask-button {
+    display: grid;
+    place-items: center;
+}
+
+.subtask-button button {
+    font-family: 'Montserrat', sans-serif;
+    width: 30vw;
+    font-size: 1.5rem;
+    color: white;
+    background-color: #008ecf;
+}
+
+.save {
+    display: block !important;
+}
+
+.subtask-fields {
+    display: none;
+    place-items: center;
+}
+
+.subtask-fields h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.subtask-fields button {
+    width: 10vw;
+    margin: 2vh;
+}

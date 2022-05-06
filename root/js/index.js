@@ -179,9 +179,8 @@ class Task {
     _priority; // the priority value of the task
 
 
-    constructor(name, course, assessment, forMarks, dueDate, reminderDate) {
+    constructor(name, assessment, forMarks, dueDate, reminderDate) {
         this._name = name;
-        this._class = course;
         this._assessment = assessment;
         this._completed = false;
         this._grade = 100;
@@ -198,10 +197,6 @@ class Task {
 
     setGrade(grade){
         this._grade = grade;
-    }
-
-    setClass(course){
-        this._class = course;
     }
 
     setAssessment(assessment){
@@ -234,10 +229,6 @@ class Task {
 
     getGrade(){
         return this._grade;     
-    }
-
-    getClass(){
-        return this._class;     
     }
 
     getAssesssment(){
@@ -506,7 +497,7 @@ function tempInitialize() {
 
 
     for (let i = 0; i < 10; i++) {
-        let tasker = new Task(i, course, ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5));
+        let tasker = new Task(i, ass, false, new Date(2022, 6, 5), new Date(2022, 6, 5));
         tasker._priority = i;
         tempArray.push(tasker);
     }
@@ -544,7 +535,7 @@ function tempInitialize() {
         div.appendChild(markAsComplete);
         div.appendChild(edit);
 
-        newRow.cells[0].innerHTML = tempTask.getClass().getName();
+        newRow.cells[0].innerHTML = tempTask.getAssessment().getClass();
         newRow.cells[1].innerHTML = tempTask.getName();
         newRow.cells[2].innerHTML = tempTask.getFormattedDueDate();
         newRow.cells[3].appendChild(div);

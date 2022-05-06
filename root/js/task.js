@@ -171,7 +171,6 @@ class Task {
     _grade; // current task grade
     _assessment; // assessment that the task belongs to
     _completed; // true if the assessment has been completed
-    _parentTask; // parent task
     _subtasks; // array that contains a list of subtasks
     _reminderDate; // the date of the reminder
     _dueDate; // the due date of the reminder
@@ -179,13 +178,11 @@ class Task {
     _priority; // the priority value of the task
 
 
-    constructor(name, course, assessment, forMarks, dueDate, reminderDate) {
+    constructor(name, assessment, forMarks, dueDate, reminderDate) {
         this._name = name;
-        this._class = course;
         this._assessment = assessment;
         this._completed = false;
         this._grade = 100;
-        this._parentTask = null;
         this._subtasks = [];
         this._forMarks = forMarks;
         this._dueDate = dueDate;
@@ -200,10 +197,6 @@ class Task {
         this._grade = grade;
     }
 
-    setClass(course){
-        this._class = course;
-    }
-
     setAssessment(assessment){
         this._assessment = assessment;
     }
@@ -214,10 +207,6 @@ class Task {
 
     setSubtasks(subtasks){
         this._subtasks = subtasks;
-    }
-
-    setParent(parent) {
-        this._parentTask = parent;
     }
 
     setDueDate(date) {
@@ -236,20 +225,12 @@ class Task {
         return this._grade;     
     }
 
-    getClass(){
-        return this._class;     
-    }
-
     getAssesssment(){
         return this._assessment;
     }
 
     getSubtasks(){
         return this._subtasks;   
-    }
-
-    getParent(){
-        return this._parentTask;     
     }
 
     getPriority() {
@@ -266,6 +247,10 @@ class Task {
 
     getFormattedDueDate() {
         return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
+    }
+
+    getFormattedReminderDate() {
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + 1 + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -285,9 +270,6 @@ class Task {
     }
 
     addGrade(grade) {
-        if (this._parentTask) {
-            this._parentTask.addChildGrade(grade);
-        }
         this._grade = grade;
     }
 
@@ -295,12 +277,7 @@ class Task {
         this._grade += grade / this._subtasks.length;
     }
 
-    setParent(parent) {
-        this._parentTask = parent;
-    }
-
     addSubtask(subtask) {
-        subtasks.setParent(this);
         this._subtasks.push(subtask);
     }
 
@@ -315,12 +292,109 @@ class Task {
     }
 }
 
-let temp = sessionStorage.getItem('editTask');
-console.log(temp);
-temp = JSON.parse(temp);
-console.log(temp);
+let task = Object.assign(new Task(), JSON.parse(sessionStorage.getItem('editTask')));
+task.setDueDate(new Date(task.getDueDate()));
+task.setReminderDate(new Date(task.getReminderDate()));
+let classes = JSON.parse(sessionStorage.getItem('classes'));
 
-let man = sessionStorage.getItem('classes');
-console.log(man);
-man = JSON.parse(man);
-console.log(man);
+function initializeGUI() {
+    document.getElementById('subheading').textContent = "Task Name: " + task.getName();
+    document.getElementById('due-date').textContent = "Due Date: " + task.getFormattedDueDate();
+    document.getElementById('reminder-date').textContent = "Reminder Date: " + task.getFormattedReminderDate();
+
+
+    document.getElementById('due-month').placeholder = task.getDueDate().getMonth();
+    document.getElementById('due-day').placeholder = task.getDueDate().getDay();
+    document.getElementById('due-year').placeholder = task.getDueDate().getFullYear();
+    document.getElementById('due-hour').placeholder = task.getDueDate().getHours();
+    document.getElementById('due-minute').placeholder = task.getDueDate().getMinutes();
+    
+    document.getElementById('reminder-month').placeholder = task.getReminderDate().getMonth();
+    document.getElementById('reminder-day').placeholder = task.getReminderDate().getDay();
+    document.getElementById('reminder-year').placeholder = task.getReminderDate().getFullYear();
+    document.getElementById('reminder-hour').placeholder = task.getReminderDate().getHours();
+    document.getElementById('reminder-minute').placeholder = task.getReminderDate().getMinutes();
+}
+
+function initializeSubtasks() {
+    let table = document.getElementById('subtasks');
+
+    for (let subtask in task.getSubtasks()) {
+        subtask = Object.assign(new Task(), subtask);
+
+        let newRow = table.rows[1].cloneNode(true);
+        let div = document.createElement('div');
+        let markAsComplete = document.createElement('button');
+    
+        markAsComplete.textContent = "Mark Complete";
+        markAsComplete.setAttribute('style', 'background-color: #008ecf')
+    
+        markAsComplete.onclick = function() {
+            newRow.setAttribute('style', 'display: none');
+            document.getElementById('completed-message').setAttribute('style', 'display: grid');
+    
+            setTimeout(function () {
+                document.getElementById('completed-message').setAttribute('style', 'display: none');
+            }, 2500);
+        }
+    
+        div.appendChild(markAsComplete);
+    
+    
+        newRow.cells[0].innerHTML = subtask.getName();
+        newRow.cells[1].appendChild(div);
+        table.appendChild(newRow);
+
+        document.getElementById('subtask-container').setAttribute('style', 'display: grid');
+        document.getElementById('no-subtasks').setAttribute('style', 'display: none');
+    }
+
+
+}
+
+function addSubtask(name) {
+    let newSubTask = new Task(name, task.getAssesssment(), false, task.getDueDate(), task.getReminderDate());
+    let table = document.getElementById('subtasks');
+    let newRow = table.rows[1].cloneNode(true);
+    let div = document.createElement('div');
+    let markAsComplete = document.createElement('button');
+
+    markAsComplete.textContent = "Mark Complete";
+    markAsComplete.setAttribute('style', 'background-color: #008ecf')
+
+    markAsComplete.onclick = function() {
+        newRow.setAttribute('style', 'display: none');
+        document.getElementById('completed-message').setAttribute('style', 'display: grid');
+
+        setTimeout(function () {
+            document.getElementById('completed-message').setAttribute('style', 'display: none');
+        }, 2500);
+    }
+
+    div.appendChild(markAsComplete);
+
+
+    newRow.cells[0].innerHTML = name;
+    newRow.cells[1].appendChild(div);
+    table.appendChild(newRow);
+    task.addSubtask(newSubTask);
+}
+
+document.getElementById('adder').addEventListener("click", function() {
+    let name = document.getElementById('subtask-name').value;
+    if (name) {
+        addSubtask(name);
+        document.getElementById('subtask-name').value = "";
+        document.getElementById('subtask-fields').setAttribute('style', 'display: none');
+        document.getElementById('subtask-container').setAttribute('style', 'display: grid');
+        document.getElementById('no-subtasks').setAttribute('style', 'display: none');
+    } else {
+        alert("Invalid Subtask Name");
+    }
+}, false);
+
+document.getElementById('add-subtask').addEventListener("click", function() {
+    document.getElementById('subtask-fields').setAttribute('style', 'display: grid');
+}, false);
+
+initializeGUI();

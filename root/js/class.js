@@ -305,8 +305,6 @@ function addClasses() {
 
     let dropdown = document.getElementById('class-dropdown');
 
-    console.log(classes);
-
     for (let c in classes) {
         let button = document.createElement("button");
         button.type = "button";
@@ -341,11 +339,9 @@ function loadClassDetails() {
     for (let i = 0; i < queue.length; i++) {
         let item = Object.assign(new Task(), queue[i]);
 
-        if (item.getAssessment().getClass() === selectedClass.getName()) {
+        if (item._assessment._class === selectedClass.getName()) {
             let newRow = taskTable.rows[1].cloneNode(true);
             item.setDueDate(new Date(item.getDueDate()));
-
-            console.log(item);
 
             newRow.cells[0].innerHTML = item.getName();
             newRow.cells[1].innerHTML = item.getFormattedDueDate();

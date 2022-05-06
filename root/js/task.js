@@ -246,11 +246,11 @@ class Task {
     }
 
     getFormattedDueDate() {
-        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
+        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
     }
 
     getFormattedReminderDate() {
-        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + 1 + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -324,7 +324,6 @@ function initializeSubtasks() {
     let table = document.getElementById('subtasks');
 
     for (let subtask in task.getSubtasks()) {
-        console.log(subtask);
         subtask = Object.assign(new Task(), subtask);
 
         let newRow = table.rows[1].cloneNode(true);
@@ -347,7 +346,6 @@ function initializeSubtasks() {
     
     
         newRow.cells[0].innerHTML = subtask.getName();
-        console.log(subtask);
         newRow.cells[1].appendChild(div);
         table.appendChild(newRow);
 

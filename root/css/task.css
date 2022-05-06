@@ -14,7 +14,7 @@
     font-size: 1.5rem;
     margin: 0;
     text-align: center;
-    margin-top: 10vh;
+    margin-top: 1vh;
 }
 
 .tasks-table {
@@ -75,3 +75,21 @@
     margin: 2vh;
 }
 
+.grade-input {
+    display: grid;
+    place-items: center;
+}
+
+.grade-input h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.grade-input button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #008ecf;
+    color: white;
+    border-radius: 1vh;
+    margin-bottom: 2vh;
+}

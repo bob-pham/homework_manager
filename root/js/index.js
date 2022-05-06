@@ -246,11 +246,11 @@ class Task {
     }
 
     getFormattedDueDate() {
-        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
+        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + "-" + this._dueDate.getDate() + "     " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
     }
 
     getFormattedReminderDate() {
-        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + "-" + this._reminderDate.getDate() + "      " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -579,8 +579,6 @@ function tempInitialize() {
 
         div.appendChild(markAsComplete);
         div.appendChild(edit);
-
-        console.log(tempTask);
 
         newRow.cells[0].innerHTML = tempTask._assessment._class;
         newRow.cells[1].innerHTML = tempTask.getName();

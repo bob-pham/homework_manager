@@ -316,6 +316,7 @@ function addClass() {
         button.textContent = classNames[i];
         button.onclick = function() {
             selectedClass = classes[classNames[i]];
+            console.log(selectedClass);
             document.getElementById('assessments').setAttribute('style', 'display: inline');
             document.getElementById('class-name').textContent = "Class: " + classNames[i];
             document.getElementById('class-name').setAttribute('style', 'display: inline');
@@ -338,10 +339,10 @@ function chooseAssessment() {
         button.type = "button";
         button.textContent = key;
         button.onclick = function() {
-            selectedAssessment = selectedClass.getAssesssment(key);
+            selectedAssessment = Object.assign(new Assessment(), selectedClass._syllabus[key]);
             document.getElementById('due-date-selection').setAttribute('style', 'display: grid');
             document.getElementById('reminder-date-selection').setAttribute('style', 'display: grid');
-            document.getElementById('assessment-name').textContent = "Assessment: " + key + "   : Weight: " + syllabus[key];
+            document.getElementById('assessment-name').textContent = "Assessment: " + key + "   : Weight: " + selectedAssessment.getWeight();
             document.getElementById('assessment-name').setAttribute('style', 'display: grid');
             document.getElementById('save').setAttribute('style', 'display: grid');
         }
@@ -473,7 +474,7 @@ function initializeClasses() {
         for (let key in classes) {
             classNames.push(key);
             classes[key] = Object.assign(new Course(), classes[key]);
-            let syllabus = classes[key].getSyllabus();
+            let syllabus = Object.assign({}, classes[key].getSyllabus());
 
             //makes nested Assessment objects in syllabus Assessment objects 
             for (let a in syllabus) {

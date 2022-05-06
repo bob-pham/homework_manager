@@ -243,6 +243,7 @@ function saveChanges() {
 
     classes[newClass.getName()] = newClass;
     localStorage.setItem("classes", JSON.stringify(classes));
+
     return JSON.parse(localStorage.getItem("classes"));
 }
 
@@ -286,8 +287,8 @@ document.getElementById("save-changes").addEventListener("click", function() {
     location.href = "../index.html";
 }, false);
 
-tempInitializeClasses();
 
+tempInitializeClasses();
 
 // chrome.storage.sync.get(["classes"], function(result) {
 //     classes = JSON.parse(result);

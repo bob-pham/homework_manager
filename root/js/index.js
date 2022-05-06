@@ -473,7 +473,6 @@ function initializeTasks() {
 function tempInitializeClasses() {
     classes = localStorage.getItem("classes");
     
-    
     if (classes) {
         classes = JSON.parse(classes);
         

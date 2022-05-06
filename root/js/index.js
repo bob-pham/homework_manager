@@ -288,7 +288,7 @@ class Task {
         const currentDate = new Date();
         let difference = (currentDate.getTime() - this._dueDate.getTime()) / (1000 * 60 * 60 * 24);
         difference *= this._assessment.getWeight();
-        this._priority = difference;
+        this._priority = 1 / difference;
     }
 }
 
@@ -412,6 +412,7 @@ function initializeTasks() {
     if (hasNewTask) {
         let tempQueue = new PriorityQueue();
         let tempArray = [];
+        let oldArray = pq.getQueue();
         let count = 0;
         let table = document.getElementById('upcoming-tasks');
 
@@ -420,8 +421,8 @@ function initializeTasks() {
             pq.enqueue(newTask);
         }
         
-        for (let x in pq.getQueue()) {
-            tempArray.push(x);
+        for (let i = 0; i < oldArray.length; i++) {
+            tempArray[i] = oldArray[i];
         }
 
         tempQueue.setQueue(tempArray);
@@ -506,6 +507,9 @@ function tempInitializeTasks() {
         // reinitialize all as a Task object
         for (let i = 0; i < tempArray.length; i++) {
             tempArray[i] = Object.assign(new Task(), tempArray[i]);
+            tempArray[i].setAssessment(Object.assign(new Assessment(), tempArray[i].getAssessment()));
+            tempArray[i].setDueDate(new Date(tempArray[i].getDueDate()));
+            tempArray[i].setReminderDate(new Date(tempArray[i].getReminderDate()));
         }
 
         pq.setQueue(tempArray);
@@ -515,6 +519,7 @@ function tempInitializeTasks() {
     if (sesh && sesh == "true") {
         let newTask = Object.assign(new Task(), JSON.parse(sessionStorage.getItem("newTask")));
         pq.enqueue(newTask);
+        sessionStorage.setItem('hasNewTask', "false");
     }
 
 }
@@ -533,6 +538,10 @@ function tempInitialize() {
     //create copy of array (needs to be a separate object)
     for (let i = 0; i < priorityArray.length; i++) {
         tempArray[i] = priorityArray[i];
+        tempArray[i] = Object.assign(new Task(), tempArray[i]);
+        tempArray[i].setAssessment(Object.assign(new Assessment(), tempArray[i].getAssessment()));
+        tempArray[i].setDueDate(new Date(tempArray[i].getDueDate()));
+        tempArray[i].setReminderDate(new Date(tempArray[i].getReminderDate()));
     }
     
     //we will use this queue to get the top 5 Priority items.
@@ -571,7 +580,9 @@ function tempInitialize() {
         div.appendChild(markAsComplete);
         div.appendChild(edit);
 
-        newRow.cells[0].innerHTML = tempTask.getAssessment().getClass();
+        console.log(tempTask);
+
+        newRow.cells[0].innerHTML = tempTask._assessment._class;
         newRow.cells[1].innerHTML = tempTask.getName();
         newRow.cells[2].innerHTML = tempTask.getFormattedDueDate();
         newRow.cells[3].appendChild(div);
@@ -579,9 +590,16 @@ function tempInitialize() {
         table.appendChild(newRow);
     }
 
+    if (Object.keys(classes).length) {
+        localStorage.setItem("classes", JSON.stringify(classes));
+    }
+
+    if (pq.getQueue()) {
+        localStorage.setItem("queue", JSON.stringify(pq.getQueue()));
+    }
+
 }
 
 
 // initialize();
-
 tempInitialize();

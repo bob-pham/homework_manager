@@ -288,7 +288,7 @@ class Task {
         const currentDate = new Date();
         let difference = (currentDate.getTime() - this._dueDate.getTime()) / (1000 * 60 * 60 * 24);
         difference *= this._assessment.getWeight();
-        this._priority = difference;
+        this._priority = 1 / difference;
     }
 }
 

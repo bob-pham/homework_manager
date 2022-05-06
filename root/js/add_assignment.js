@@ -288,7 +288,7 @@ class Task {
         const currentDate = new Date();
         let difference = (currentDate.getTime() - this._dueDate.getTime()) / (1000 * 60 * 60 * 24);
         difference *= this._assessment.getWeight();
-        this._priority = difference;
+        this._priority = 1 / difference;
     }
 }
  
@@ -340,6 +340,8 @@ function chooseAssessment() {
         button.textContent = key;
         button.onclick = function() {
             selectedAssessment = Object.assign(new Assessment(), selectedClass._syllabus[key]);
+            selectedAssessment.setClass(selectedClass.getName());
+            console.log(selectedAssessment);
             document.getElementById('due-date-selection').setAttribute('style', 'display: grid');
             document.getElementById('reminder-date-selection').setAttribute('style', 'display: grid');
             document.getElementById('assessment-name').textContent = "Assessment: " + key + "   : Weight: " + selectedAssessment.getWeight();
@@ -348,6 +350,7 @@ function chooseAssessment() {
         }
 
         dropdown.appendChild(button);
+        console.log(syllabus[key]);
     }
 }
 

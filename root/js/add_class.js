@@ -241,6 +241,7 @@ function saveChanges() {
 
     // });
 
+    saveClassName();
     classes[newClass.getName()] = newClass;
     localStorage.setItem("classes", JSON.stringify(classes));
 

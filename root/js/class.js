@@ -296,8 +296,8 @@ class Task {
 // Functions that run the page
 
 // Global Variables
-let classes = JSON.parse(sessionStorage.getItem('classes'));
-let queue = JSON.parse(sessionStorage.getItem('priorityqueue'));
+let classes = JSON.parse(localStorage.getItem('classes'));
+let queue = Object.assign([], JSON.parse(localStorage.getItem("queue")));
 let selectedClass;
 let currentWeight = 0;
 
@@ -412,6 +412,26 @@ function initialize() {
 
 
 function tempInitialize() {
+    classes = localStorage.getItem("classes");
+    
+    if (classes) {
+        classes = JSON.parse(classes);
+        
+        //reinitializes the course as a course object
+        for (let key in classes) {
+            classes[key] = Object.assign(new Course(), classes[key]);
+            let syllabus = classes[key].getSyllabus();
+
+            //makes nested Assessment objects in syllabus Assessment objects 
+            for (let a in syllabus) {
+                syllabus[a] = Object.assign(new Assessment(), syllabus[a]);
+            }
+        }
+    } else {
+        classes = {};
+    }
+
+
     addClasses();
 }
 

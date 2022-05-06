@@ -250,7 +250,7 @@ class Task {
     }
 
     getFormattedReminderDate() {
-        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + 1 + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -602,4 +602,5 @@ function tempInitialize() {
 
 
 // initialize();
+// localStorage.clear();
 tempInitialize();

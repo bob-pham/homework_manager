@@ -339,16 +339,19 @@ function loadClassDetails() {
     }
 
     for (let i = 0; i < queue.length; i++) {
-        let newRow = taskTable.rows[1].cloneNode(true);
         let item = Object.assign(new Task(), queue[i]);
-        item.setDueDate(new Date(item.getDueDate()));
 
-        console.log(item);
+        if (item.getAssessment().getClass() === selectedClass.getName()) {
+            let newRow = taskTable.rows[1].cloneNode(true);
+            item.setDueDate(new Date(item.getDueDate()));
 
-        newRow.cells[0].innerHTML = item.getName();
-        newRow.cells[1].innerHTML = item.getFormattedDueDate();
+            console.log(item);
 
-        taskTable.appendChild(newRow);
+            newRow.cells[0].innerHTML = item.getName();
+            newRow.cells[1].innerHTML = item.getFormattedDueDate();
+
+            taskTable.appendChild(newRow);
+        }
     }
 
     document.getElementById('class-details').setAttribute('style', 'display:grid');

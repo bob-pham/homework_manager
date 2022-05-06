@@ -246,11 +246,11 @@ class Task {
     }
 
     getFormattedDueDate() {
-        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + 1 + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
+        return this._dueDate.getFullYear() + "-" + this._dueDate.getMonth() + "-" + this._dueDate.getDate() + " " + this._dueDate.getHours() + ":" + this._dueDate.getMinutes();
     }
 
     getFormattedReminderDate() {
-        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + 1 + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
+        return this._reminderDate.getFullYear() + "-" + this._reminderDate.getMonth() + "-" + this._reminderDate.getDate() + " " + this._reminderDate.getHours() + ":" + this._reminderDate.getMinutes();
     }
     
     /**
@@ -288,7 +288,7 @@ class Task {
         const currentDate = new Date();
         let difference = (currentDate.getTime() - this._dueDate.getTime()) / (1000 * 60 * 60 * 24);
         difference *= this._assessment.getWeight();
-        this._priority = 1 / difference;
+        this._priority = difference;
     }
 }
  
@@ -302,9 +302,6 @@ let selectedClass;
 let selectedAssessment;
 let dueAm = false;
 let reminderAm = false;
-
-let temp = ["CPSC 213", "CPSC 210", "CPSC 221", "CPSC 110"];
-
 
 function addClass() {
 

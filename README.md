@@ -1,9 +1,20 @@
 # AdvancedHomeworkManager
 
-Chrome Extension Homework manager. Originally completed in February as a console application. I am currently remaking it into a Chrome Extension.
+Chrome Extension Homework manager.
 
-Changes: 
- - Priority now done using a Priority Tree ADT, for faster asymptotic run times
- - Frontend GUI redone using Grid Layout instead of BootStrap Framework, massively increasing readability and decreasing bundle size
- - Backend being rewritten using JavaScript + Chrome Storage API as a database for data persistence
- - Backend rewritten to use callback functions / promise await in order to improve user experience by decreasing perceived loading times
+## Features:
+ - Users can set a reminder seperate from (to get started) and the default due date reminder
+ - Automatic class grade calculations after completing tasks/assignments
+ - Tasks can be subdivided into subtasks for easier management
+ - Tasks in Task List displayed in order of priority, determined by how well user is doing in the class, the assignment's weight, and how close the deadline is
+
+## Demonstration Video: 
+https://youtu.be/2x9oMn2Jy0w
+
+## Implentation Details on my portfolio:
+https://bob-pham.github.io/project_pages/advanced_hw_planner.html 
+## Images:
+
+![homescreen](/root/images/hw%20homescreen.png)
+![viewclass](/root/images/hw%20view%20class.png)
+![addClass](/root/images/hw%20add%20class.png)

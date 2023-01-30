@@ -12,7 +12,7 @@ Chrome Extension Homework manager.
 https://youtu.be/2x9oMn2Jy0w
 
 ## Implentation Details on my portfolio:
-https://bob-pham.github.io/project_pages/advanced_hw_planner.html 
+https://bobpham.vercel.app/simple-device-repair-manager
 ## Images:
 
 ![homescreen](/root/images/hw%20homescreen.png)
